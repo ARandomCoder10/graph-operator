@@ -1,5 +1,7 @@
 import sys
 from turtledemo.penrose import start
+from copy import deepcopy
+
 import dijkstra_algorithm
 
 from PyQt6.QtCore import QSize, Qt, QTimer, QRectF, QPointF
@@ -7,7 +9,7 @@ from PyQt6.QtGui import QAction, QIcon, QDoubleValidator, QBrush, QPen, QPolygon
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow,
     QDialog, QDialogButtonBox,
-    QLabel, QPushButton,
+    QLabel, QPushButton, QMessageBox,
     QHBoxLayout, QVBoxLayout, QGraphicsItemGroup,
     QToolBar, QToolButton, QGraphicsDropShadowEffect,
     QWidget, QLineEdit, QComboBox, QRadioButton, QButtonGroup,
@@ -15,7 +17,7 @@ from PyQt6.QtWidgets import (
     QGraphicsEllipseItem, QGraphicsView, QApplication, QGraphicsLineItem, QGraphicsProxyWidget
 )
 
-QSS_styling = '''
+window_styling = '''
 QMainWindow {
     background-color: white;
     font-family: 'Aptos (Body)';
@@ -383,6 +385,9 @@ def update_style(widget):
     widget.style().polish(widget)
     widget.repaint()
 
+def reading_time():
+    pass
+
 #class Workspace(QGraphicsScene):
 #    def __init__(self):
 #        super().__init__()
@@ -456,8 +461,6 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.view)
 
-        self.add_vertex = False
-        self.dijkstra = False
         self.graph = {}
 
         #-------------------------------------------------
@@ -618,8 +621,6 @@ class MainWindow(QMainWindow):
         #Disabling the buttons
         self.add_vertex_button.setEnabled(False)
         self.add_arc_button.setEnabled(False)
-        self.dijkstra_button.setEnabled(False)
-        self.nearest_neighbour_button.setEnabled(False)
 
         #Highlighting the appropriate function
         match role:
@@ -651,6 +652,7 @@ class MainWindow(QMainWindow):
         #Resetting the interface
         self.add_vertex_button.setEnabled(True)
         self.add_arc_button.setEnabled(True)
+
         self.dijkstra_button.setEnabled(True)
         self.nearest_neighbour_button.setEnabled(True)
         self.dijkstra_button.blockSignals(False)
@@ -709,8 +711,6 @@ class MainWindow(QMainWindow):
 
             #Drawing the arc
             stop_1_x, stop_1_y, stop_2_x, stop_2_y = '', '', '', ''
-
-            #Drawing the arc
 
             #Finding the positions of each vertex
             for vertex in self.vertices:
@@ -900,18 +900,6 @@ class MainWindow(QMainWindow):
                 vertex_label_proxy.setPos(vertex_pos_x - vertex_label.width() // 2,
                                           vertex_pos_y - vertex_label.height() // 2)
 
-                #Setting the glow/shadow of the vertex text
-                vertex_name_effect = QGraphicsDropShadowEffect()
-                vertex_name_effect.setOffset(0, 1)
-                vertex_name_effect.setBlurRadius(15)
-                vertex_name_effect.setColor(QColor(255, 0, 0, 255))
-                vertex_label_proxy.setGraphicsEffect(vertex_name_effect)
-
-                #-------------------------------------------------------
-                #VERTEX_POSITION: EVENT RETRIEVAL
-
-                vertex_position = [vertex_pos_x, vertex_pos_y]
-
                 #-------------------------------------------------------
                 #FINAL OPERATIONS
 
@@ -926,10 +914,10 @@ class MainWindow(QMainWindow):
                 update_style(vertex_label)
                 self.workspace.addItem(vertex)
 
-                #vertex.setFlags(
+                # vertex.setFlags(
                 #    QGraphicsItem.GraphicsItemFlag.ItemIsMovable |
                 #    QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-                #)
+                # )
 
                 self.graph[vertex_name] = {}
                 self.vertices.append([vertex_shape, vertex_label_proxy, [vertex_pos_x, vertex_pos_y]])
@@ -946,6 +934,7 @@ class MainWindow(QMainWindow):
             scene_pos = self.view.mapToScene(view_pos)
             click_pos_x, click_pos_y = int(scene_pos.x()), int(scene_pos.y())
 
+            #Getting the origin and destination
             for vertex in self.vertices:
                 #If the click is within the vertex dimensions
                 if vertex[2][0] - 42 <= click_pos_x <= vertex[2][0] + 42 and (
@@ -958,6 +947,7 @@ class MainWindow(QMainWindow):
                     update_style(vertex[1].widget())
                     vertex[1].graphicsEffect().set_algorithm_selected(QColor(204, 0, 255, 255))
 
+                    #Stage 1: Selecting the origin & performing the algorithm
                     if self.dijkstra_state == 'origin':
                         self.dijkstra_origin = vertex[1].widget().text()
                         self.dijkstra_state = 'destination'
@@ -988,18 +978,6 @@ class MainWindow(QMainWindow):
 
                         self.dijkstra_active = False
                     break
-
-            print(self.dijkstra_origin)
-
-            if self.dijkstra_state == 'origin':
-                self.dijkstra_state = 'destination'
-                self.prompt_bar.setText('Select your <strong>destination</strong>')
-                print(self.graph)
-                #shortest_paths = dijkstra_algorithm.solve(self.graph, self.directed, self.dijkstra_origin)
-
-
-
-
 
 app = QApplication([])
 window = MainWindow()

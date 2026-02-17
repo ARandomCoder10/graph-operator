@@ -53,9 +53,8 @@
 #directed = False
 #principal = 'S'
 
-
+from copy import deepcopy
 def solve(graph, directed, principal):
-    from copy import deepcopy
     #Creating the dictionary of results
     results = {}
 
