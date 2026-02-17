@@ -957,7 +957,25 @@ class MainWindow(QMainWindow):
                     #Stage 2: Selecting the destination & isolating the results
                     elif self.dijkstra_origin != vertex[1].widget().text():
                         self.dijkstra_destination = vertex[1].widget().text()
-                        self.dijkstra = False
+                        self.dijkstra_results = self.dijkstra_results[self.dijkstra_destination]
+
+                        if self.dijkstra_results[1] != float('inf'):
+                            #Removing unnecessary decimals
+                            if int(self.dijkstra_results[1]) == float(self.dijkstra_results[1]):
+                                self.dijkstra_results[1] = int(self.dijkstra_results[1])
+
+                            self.prompt_bar.setText(
+                                f'<strong>Total</strong> from <strong>{self.dijkstra_origin}</strong> to <strong>{self.dijkstra_destination}</strong> is <strong>{self.dijkstra_results[1]}</strong>')
+
+                        else:
+                            #If there is no path connecting them...
+                            message = QMessageBox()
+                            message.setWindowTitle('No Path Found')
+                            message.setIcon(QMessageBox.Icon.Information)
+                            message.setText('There is no path \nconnecting the two stops.')
+                            message.exec()
+
+                        self.dijkstra_active = False
                     break
 
             print(self.dijkstra_origin)
