@@ -705,8 +705,36 @@ class MainWindow(QMainWindow):
 
             #Displaying the arc weight
             arc_weight_label = QLabel()
-            #Asterisk to show direction
-            arc_weight_label.setText(f'{str(arc_weight)}*' if direction_option == 'Directed' else str(arc_weight))
+
+            #Setting a visual arrow - ↑↗→↘↓↙←↖
+            if direction_option == 'One-way':
+
+                if stop_1_x - 21 <= stop_2_x <= stop_1_x + 21:
+                    if stop_1_y > stop_2_y:
+                        arrow = '↑'
+                    else:
+                        arrow = '↓'
+
+                elif stop_1_x < stop_2_x:
+                    if stop_1_y - 21 <= stop_2_y <= stop_1_y + 21:
+                        arrow = '→'
+                    elif stop_1_y > stop_2_y:
+                        arrow = '↗'
+                    else:
+                        arrow = '↘'
+
+                else:
+                    if stop_1_y - 21 <= stop_2_y <= stop_1_y + 21:
+                        arrow = '←'
+                    elif stop_1_y > stop_2_y:
+                        arrow = '↖'
+                    else:
+                        arrow = '↙'
+
+                arc_weight_label.setText(f'{str(arc_weight)} {arrow}')
+            else:
+                arc_weight_label.setText(str(arc_weight))
+
             arc_weight_label.setStyleSheet('''
                 QLabel { 
                     background-color: white;
