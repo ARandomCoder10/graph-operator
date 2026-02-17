@@ -833,13 +833,7 @@ class MainWindow(QMainWindow):
             if add_vertex_dialog.exec() == QDialog.DialogCode.Accepted:
                 vertex_name = add_vertex_dialog.get_vertex_name()
 
-                #-------------------------------------------------------
-                #VERTEX_SHAPE: SET DEFAULT
-
-                vertex_shape.setBrush(QBrush(QColor(Qt.GlobalColor.red)))
-                outline = QPen(QColor(Qt.GlobalColor.white), 3)
-                outline.setStyle(Qt.PenStyle.SolidLine)
-                vertex_shape.setPen(outline)
+                vertex_shape.set_default()
 
                 #-------------------------------------------------------
                 #VERTEX_LABEL: CONSTRUCTION
