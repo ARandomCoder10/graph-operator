@@ -773,11 +773,14 @@ class MainWindow(QMainWindow):
             self.isolate_role('dijkstra')
             self.dijkstra_active = True
 
-        for vertex in self.vertices:
-            vertex[0].setBrush(QBrush(QColor(Qt.GlobalColor.white)))
-            outline = QPen(QColor('#CC00FF'), 3)
-            outline.setStyle(Qt.PenStyle.SolidLine)
-            vertex[0].setPen(outline)
+            #Styling every vertex
+            for vertex in self.vertices:
+                vertex[0].set_algorithm_unselected('#CC00FF')
+                vertex[1].widget().setStyleSheet(
+                    vertex_name_styling('#CC00FF', len(vertex[1].widget().text()))
+                )
+                update_style(vertex[1].widget())
+                vertex[1].graphicsEffect().set_algorithm_unselected()
 
             vertex[1].widget().setStyleSheet('''
                         QLabel {
