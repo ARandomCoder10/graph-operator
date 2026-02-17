@@ -809,7 +809,7 @@ class MainWindow(QMainWindow):
 
         if self.add_vertex:
             #To stop it triggering in the future
-            self.add_vertex = False
+            self.add_vertex_active = False
 
             global_pos = event.globalPosition().toPoint()
             view_pos = self.view.mapFromGlobal(global_pos)
