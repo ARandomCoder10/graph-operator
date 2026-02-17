@@ -953,7 +953,7 @@ class MainWindow(QMainWindow):
 
 app = QApplication([])
 window = MainWindow()
-window.setStyleSheet(QSS_styling)
+window.setStyleSheet(window_styling)
 window.show()
 
 app.exec()
