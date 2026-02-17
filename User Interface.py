@@ -796,6 +796,14 @@ class MainWindow(QMainWindow):
             self.exit_button.show()
             self.exit_button.clicked.connect(self.exit_process)
 
+            self.dijkstra_state = 'origin'
+        else:
+            message = QMessageBox()
+            message.setWindowTitle('Algorithm Cannot Be Performed')
+            message.setIcon(QMessageBox.Icon.Warning)
+            message.setText('You do not have enough stops \nfor this algorithm to be performed.')
+            message.exec()
+
     def mousePressEvent(self, event):
 
         if self.add_vertex_active:
