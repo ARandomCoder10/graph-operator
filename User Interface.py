@@ -685,9 +685,8 @@ class MainWindow(QMainWindow):
                 stop_1_x, stop_1_y,
                 stop_2_x, stop_2_y
             )
-            arc.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
-            arc.setZValue(-1) #Setting it behind the vertices
-            self.workspace.addItem(arc)
+            arc_line.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
+            self.workspace.addItem(arc_line)
 
             #Finding the midpoints of the x & y coordinates
             if stop_2_x > stop_1_x: #If stop 2 more to the right than stop 1...
