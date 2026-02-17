@@ -768,8 +768,10 @@ class MainWindow(QMainWindow):
 
         self.exit_process()
 
-    def dijkstra_algorithm(self, event):
-        self.isolate_role('dijkstra')
+    def dijkstra_initiation(self, event):
+        if len(self.vertices) >= 2:
+            self.isolate_role('dijkstra')
+            self.dijkstra_active = True
 
         for vertex in self.vertices:
             vertex[0].setBrush(QBrush(QColor(Qt.GlobalColor.white)))
