@@ -526,6 +526,7 @@ class MainWindow(QMainWindow):
         #Dijkstra's icon (2 x 2)
         self.dijkstra_button = QPushButton(self)
         self.dijkstra_button.setFixedSize(91, 91)
+        self.dijkstra_button.setIcon(QIcon(r'icons\dijkstra.png'))
         self.dijkstra_button.setIconSize(QSize(91, 91))
         self.dijkstra_button.setToolTip('Find the shortest path from one stop to another')
 
