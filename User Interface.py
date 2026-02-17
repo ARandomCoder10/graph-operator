@@ -816,7 +816,7 @@ class MainWindow(QMainWindow):
             scene_pos = self.view.mapToScene(view_pos)
             vertex_pos_x, vertex_pos_y = int(scene_pos.x()), int(scene_pos.y())
 
-            vertex_shape = QGraphicsEllipseItem(0, 0, 84, 84)
+            vertex_shape = VertexShape()
             vertex_shape.setPos(vertex_pos_x - 42, vertex_pos_y - 42)
             vertex_shape.setZValue(100)
 
