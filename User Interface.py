@@ -807,7 +807,7 @@ class MainWindow(QMainWindow):
 
     def mousePressEvent(self, event):
 
-        if self.add_vertex:
+        if self.add_vertex_active:
             #To stop it triggering in the future
             self.add_vertex_active = False
 
