@@ -609,8 +609,9 @@ class MainWindow(QMainWindow):
         self.add_arc_button.setEnabled(True)
         self.dijkstra_button.setEnabled(True)
         self.nearest_neighbour_button.setEnabled(True)
-        self.highlight_dijkstra(True)
-        self.highlight_nearest_neighbour(True)
+        self.dijkstra_button.blockSignals(False)
+        self.nearest_neighbour_button.blockSignals(False)
+
         self.prompt_bar.hide()
         self.exit_button.hide()
 
