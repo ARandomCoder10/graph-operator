@@ -940,19 +940,12 @@ class MainWindow(QMainWindow):
                 if vertex[2][0] - 42 <= click_pos_x <= vertex[2][0] + 42 and (
                         vertex[2][1] - 42 <= click_pos_y <= vertex[2][1] + 42):
 
-                    vertex[1].widget().setStyleSheet('''
-                                            QLabel {
-                                                font-size: 25px;
-                                                background-color: transparent;
-                                                font-weight: bold;
-                                                color: white;
-                                            }
-                                        ''')
-                    vertex_name_effect = QGraphicsDropShadowEffect()
-                    vertex_name_effect.setOffset(0, 1)
-                    vertex_name_effect.setBlurRadius(15)
-                    vertex_name_effect.setColor(QColor(208, 0, 255, 255))
-                    vertex[1].setGraphicsEffect(vertex_name_effect)
+                    #Styling the selected verticees
+                    vertex[0].set_algorithm_selected('#CC00FF')
+                    vertex[1].widget().setStyleSheet(
+                        vertex_name_styling('white', len(vertex[1].widget().text())))
+                    update_style(vertex[1].widget())
+                    vertex[1].graphicsEffect().set_algorithm_selected(QColor(204, 0, 255, 255))
 
                     if self.dijkstra_state == 'origin':
                         self.dijkstra_origin = vertex[1].widget().text()
