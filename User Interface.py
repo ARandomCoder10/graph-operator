@@ -659,6 +659,8 @@ class MainWindow(QMainWindow):
                     self.graph[stop_1][stop_2] = arc_weight
                 else:
                     self.graph[stop_2][stop_1] = arc_weight
+                    #Swapping the direction
+                    stop_1, stop_2 = stop_2, stop_1
                 self.directed = True
 
             stop_1_x, stop_1_y, stop_2_x, stop_2_y = '', '', '', ''
