@@ -789,13 +789,12 @@ class MainWindow(QMainWindow):
             update_style(self.prompt_bar)
             self.prompt_bar.show()
 
-        self.dijkstra = True
-
-        self.exit_button.setProperty('type', 'exit')
-        self.exit_button.setProperty('role', 'dijkstra')
-        update_style(self.exit_button)
-        self.exit_button.show()
-        self.exit_button.clicked.connect(self.exit_process)
+            self.exit_button.setText('Exit algorithm')
+            self.exit_button.setProperty('type', 'exit')
+            self.exit_button.setProperty('role', 'dijkstra')
+            update_style(self.exit_button)
+            self.exit_button.show()
+            self.exit_button.clicked.connect(self.exit_process)
 
     def mousePressEvent(self, event):
 
