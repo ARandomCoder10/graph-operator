@@ -568,21 +568,7 @@ class MainWindow(QMainWindow):
 
         self.add_vertex_button.clicked.connect(self.adding_a_vertex)
         self.add_arc_button.clicked.connect(self.adding_an_arc)
-        self.dijkstra_button.clicked.connect(self.dijkstra_algorithm)
-
-    def highlight_dijkstra(self, state):
-        if state:
-            self.dijkstra_button.setIcon(QIcon(r'icons\dijkstra (enabled).png'))
-        else:
-            self.dijkstra_button.setIcon(QIcon(r'icons\dijkstra (disabled).png'))
-
-    def highlight_nearest_neighbour(self, state):
-        if state:
-            self.nearest_neighbour_button.setIcon(
-                QIcon(r'icons\nearest neighbour (enabled).png'))
-        else:
-            self.nearest_neighbour_button.setIcon(
-                QIcon(r'icons\nearest neighbour (disabled).png'))
+        self.dijkstra_button.clicked.connect(self.dijkstra_initiation)
 
     def isolate_role(self, role):
         #Disabling the buttons
