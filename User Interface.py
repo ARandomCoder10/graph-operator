@@ -597,8 +597,8 @@ class MainWindow(QMainWindow):
             case 'nearest_neighbour':
                 self.add_vertex_button.setProperty('state', 'greyed')
                 self.add_arc_button.setProperty('state', 'greyed')
-                self.highlight_dijkstra(False)
-                self.highlight_nearest_neighbour(True)
+                self.dijkstra_button.setEnabled(False)
+                self.nearest_neighbour_button.blockSignals(True)
 
         update_style(self.add_vertex_button)
         update_style(self.add_arc_button)
