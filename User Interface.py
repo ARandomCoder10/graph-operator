@@ -744,6 +744,8 @@ class MainWindow(QMainWindow):
                     border-radius: 5px
                 }
             ''')
+            update_style(arc_weight_label)
+
             arc_weight_label.adjustSize()
             arc_weight_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
