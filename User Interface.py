@@ -759,12 +759,11 @@ class MainWindow(QMainWindow):
             arc.setZValue(-100)
             self.workspace.addItem(arc)
 
-            #Stpped effect because wasn't opaque enough against black line
-            #arc_label_effect = QGraphicsDropShadowEffect()
-            #arc_label_effect.setBlurRadius(20)
-            #arc_label_effect.setOffset(0, 0)
-            #arc_label_effect.setColor(QColor(255, 255, 255, 255))
-            #arc_weight_proxy.setGraphicsEffect(arc_label_effect)
+            # vertex.setFlags(
+            #    QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+            # )
+
+            self.arcs.append([arc_line, arc_weight_proxy, [stop_1, stop_2], directed_route])
 
         self.exit_process()
 
