@@ -582,6 +582,8 @@ class MainWindow(QMainWindow):
             case 'add_vertex':
                 self.add_vertex_button.setProperty('state', 'highlighted')
                 self.add_arc_button.setProperty('state', 'greyed')
+                self.dijkstra_button.setEnabled(False)
+                self.nearest_neighbour_button.setEnabled(False)
             case 'add_arc':
                 self.add_arc_button.setProperty('state', 'highlighted')
                 self.add_vertex_button.setProperty('state', 'greyed')
