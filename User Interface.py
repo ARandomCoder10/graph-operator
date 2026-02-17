@@ -736,7 +736,9 @@ class MainWindow(QMainWindow):
                 arc_weight_label.setText(str(arc_weight))
 
             arc_weight_label.setStyleSheet('''
-                QLabel { 
+                QLabel {
+                    font-weight: bold;
+                    font-size: 20px;
                     background-color: white;
                     color: black;
                     padding: 3px;
