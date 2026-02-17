@@ -751,9 +751,13 @@ class MainWindow(QMainWindow):
             arc_weight_proxy.setWidget(arc_weight_label)
             arc_weight_proxy.setPos(midpoint_x - arc_weight_proxy.rect().width() // 2,
                                     midpoint_y - arc_weight_proxy.rect().height() // 2
-                                    ) #Position in centre of vertex
-            arc_weight_proxy.setZValue(0) #Setting above all other items
-            self.workspace.addItem(arc_weight_proxy)
+                                    ) #Position in the centre of vertex
+
+            arc = QGraphicsItemGroup()
+            arc.addToGroup(arc_line)
+            arc.addToGroup(arc_weight_proxy)
+            arc.setZValue(-100)
+            self.workspace.addItem(arc)
 
             #Stpped effect because wasn't opaque enough against black line
             #arc_label_effect = QGraphicsDropShadowEffect()
