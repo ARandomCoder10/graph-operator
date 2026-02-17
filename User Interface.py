@@ -533,6 +533,7 @@ class MainWindow(QMainWindow):
         #Nearest Neighbour icon (2 x 2)
         self.nearest_neighbour_button = QPushButton(self)
         self.nearest_neighbour_button.setFixedSize(91, 91)
+        self.nearest_neighbour_button.setIcon(QIcon(r'icons\nearest neighbour.png'))
         self.nearest_neighbour_button.setIconSize(QSize(91, 91))
         self.nearest_neighbour_button.setToolTip('Find the shortest path to visit all stops and return')
 
