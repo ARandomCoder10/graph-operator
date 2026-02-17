@@ -622,7 +622,7 @@ class MainWindow(QMainWindow):
 
     def adding_a_vertex(self):
         self.isolate_role('add_vertex')
-        self.add_vertex = True
+        self.add_vertex_active = True
 
         #Setting the label
         self.prompt_bar.setText('<strong>Click anywhere</strong> to place a <strong>stop</strong>')
