@@ -554,8 +554,12 @@ class MainWindow(QMainWindow):
         #--------------------------------------------------------------------------
         #FUNCTION OPERATION
 
-        self.highlight_dijkstra(True)
-        self.highlight_nearest_neighbour(True)
+        self.dijkstra_button.setEnabled(True)
+        self.nearest_neighbour_button.setEnabled(True)
+
+        self.add_vertex_active = False
+        self.dijkstra_active = False
+        self.nearest_neighbour_active = False
 
         # the two states of selection
         self.dijkstra_state = 'origin'
