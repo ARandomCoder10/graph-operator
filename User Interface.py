@@ -847,7 +847,7 @@ class MainWindow(QMainWindow):
                 #Initial construction & styling
                 vertex_label = QLabel(vertex_name)
                 vertex_label.setWordWrap(True)
-                vertex_label.setMaximumWidth(150)
+                vertex_label.setMaximumWidth(300)
                 vertex_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
                 #Adjusting the text sizing based on length of text entered
