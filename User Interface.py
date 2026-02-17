@@ -389,6 +389,50 @@ def update_style(widget):
 #        self.setSceneRect(QRectF(0, 0, 1539, 841))
 #        self.setBackgroundBrush(Qt.GlobalColor.white)
 
+class VertexShape(QGraphicsEllipseItem):
+    def __init__(self):
+        super().__init__()
+        self.setRect(0, 0, 84, 84)
+
+    def set_placeholder(self):
+        self.setBrush(QBrush(QColor(Qt.GlobalColor.transparent)))
+        outline = QPen(QColor('#0033CC'), 3)
+        outline.setStyle(Qt.PenStyle.DotLine)
+        self.setPen(outline)
+
+    def set_default(self):
+        self.setBrush(QBrush(QColor(Qt.GlobalColor.red)))
+        outline = QPen(QColor(Qt.GlobalColor.white), 3)
+        outline.setStyle(Qt.PenStyle.SolidLine)
+        self.setPen(outline)
+
+    def set_algorithm_unselected(self, theme_color):
+        self.setBrush(QBrush(QColor(Qt.GlobalColor.white)))
+        outline = QPen(QColor(theme_color), 3)
+        outline.setStyle(Qt.PenStyle.SolidLine)
+        self.setPen(outline)
+
+    def set_algorithm_selected(self, theme_color):
+        self.setBrush(QBrush(QColor(theme_color)))
+        outline = QPen(QColor(Qt.GlobalColor.white), 3)
+        outline.setStyle(Qt.PenStyle.SolidLine)
+        self.setPen(outline)
+
+class VertexIdentifierEffect(QGraphicsDropShadowEffect):
+    def __init__(self):
+        super().__init__()
+        self.setOffset(1, 1)
+        self.setBlurRadius(10)
+
+    def set_default(self):
+        self.setColor(QColor(255, 0, 0, 255))
+
+    def set_algorithm_unselected(self):
+        self.setColor(QColor(255, 255, 255, 255))
+
+    def set_algorithm_selected(self, theme_color):
+        self.setColor(theme_color)
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
