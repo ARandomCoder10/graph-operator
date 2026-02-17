@@ -937,11 +937,8 @@ class MainWindow(QMainWindow):
 
             for vertex in self.vertices:
                 #If the click is within the vertex dimensions
-                if vertex[2][0] - 42 <= click_pos_x <= vertex[2][0] + 42 and vertex[2][1] - 42 <= click_pos_y <= vertex[2][1] + 42 and vertex[1].widget().text() != self.dijkstra_origin:
-                    vertex[0].setBrush(QBrush(QColor('#CC00FF')))
-                    outline = QPen(Qt.GlobalColor.white, 3)
-                    outline.setStyle(Qt.PenStyle.SolidLine)
-                    vertex[0].setPen(outline)
+                if vertex[2][0] - 42 <= click_pos_x <= vertex[2][0] + 42 and (
+                        vertex[2][1] - 42 <= click_pos_y <= vertex[2][1] + 42):
 
                     vertex[1].widget().setStyleSheet('''
                                             QLabel {
