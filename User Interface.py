@@ -663,6 +663,7 @@ class MainWindow(QMainWindow):
                     stop_1, stop_2 = stop_2, stop_1
                 self.directed = True
 
+            #Drawing the arc
             stop_1_x, stop_1_y, stop_2_x, stop_2_y = '', '', '', ''
 
             #Drawing the arc
