@@ -882,7 +882,7 @@ class MainWindow(QMainWindow):
                 #)
 
                 self.graph[vertex_name] = {}
-                self.vertices.append([vertex_shape, vertex_label_proxy, vertex_position])
+                self.vertices.append([vertex_shape, vertex_label_proxy, [vertex_pos_x, vertex_pos_y]])
 
             #...else if Cancel clicked...
             else:
@@ -890,7 +890,7 @@ class MainWindow(QMainWindow):
 
             self.exit_process()
 
-        elif self.dijkstra:
+        elif self.dijkstra_active:
             global_pos = event.globalPosition().toPoint()
             view_pos = self.view.mapFromGlobal(global_pos)
             scene_pos = self.view.mapToScene(view_pos)
