@@ -373,7 +373,7 @@ class AddArcDialog(QDialog):
     def get_direction(self):
         return self.direction_option.checkedButton().text()
     def get_route(self):
-        if self.direction_option.checkedButton().text() == 'Directed':
+        if self.direction_option.checkedButton().text() == 'One-way':
             return self.directed_routes.checkedButton().text()
         else:
             return None
