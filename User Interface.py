@@ -782,25 +782,12 @@ class MainWindow(QMainWindow):
                 update_style(vertex[1].widget())
                 vertex[1].graphicsEffect().set_algorithm_unselected()
 
-            vertex[1].widget().setStyleSheet('''
-                        QLabel {
-                            font-size: 25px;
-                            background-color: transparent;
-                            font-weight: bold;
-                            color: #CC00FF;
-                        }
-                    ''')
-            vertex_name_effect = QGraphicsDropShadowEffect()
-            vertex_name_effect.setOffset(0, 1)
-            vertex_name_effect.setBlurRadius(15)
-            vertex_name_effect.setColor(QColor(255, 255, 255, 255))
-            vertex[1].setGraphicsEffect(vertex_name_effect)
-
-        self.prompt_bar.setText('Select your <strong>origin</strong>')
-        self.prompt_bar.setProperty('type', 'prompt_bar')
-        self.prompt_bar.setProperty('role', 'dijkstra')
-        update_style(self.prompt_bar)
-        self.prompt_bar.show()
+            #Updating the prompt_bar and exit_button
+            self.prompt_bar.setText('Select your <strong>origin</strong>')
+            self.prompt_bar.setProperty('type', 'prompt_bar')
+            self.prompt_bar.setProperty('role', 'dijkstra')
+            update_style(self.prompt_bar)
+            self.prompt_bar.show()
 
         self.dijkstra = True
 
