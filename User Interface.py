@@ -96,6 +96,31 @@ QLabel[type = 'arc_weight'] {
 }
 '''
 
+
+def vertex_name_styling(color, text_length):
+    style = '''
+        QLabel {
+            background-color: transparent;
+            font-weight: bold;
+            color: #######;
+            font-size: --px;
+        }
+    '''
+
+    style = style.replace('#######', color)
+
+    #The length of the text
+    if text_length >= 15:
+        style = style.replace('--', '16')
+    elif text_length >= 8:
+        style = style.replace('--', '19')
+    elif text_length >= 4:
+        style = style.replace('--', '22')
+    else:
+        style = style.replace('--', '25')
+
+    return style
+
 class AddVertexDialog(QDialog):
     def __init__(self, vertices):
         super().__init__()
