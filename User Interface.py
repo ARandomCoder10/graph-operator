@@ -949,7 +949,13 @@ class MainWindow(QMainWindow):
 
                     if self.dijkstra_state == 'origin':
                         self.dijkstra_origin = vertex[1].widget().text()
-                    elif self.dijkstra_state == 'destination':
+                        self.dijkstra_state = 'destination'
+                        self.prompt_bar.setText('Select your <strong>destination</strong>')
+                        self.dijkstra_results = dijkstra_algorithm.solve(self.graph, self.directed,
+                                                                         self.dijkstra_origin)
+
+                    #Stage 2: Selecting the destination & isolating the results
+                    elif self.dijkstra_origin != vertex[1].widget().text():
                         self.dijkstra_destination = vertex[1].widget().text()
                         self.dijkstra = False
                     break
