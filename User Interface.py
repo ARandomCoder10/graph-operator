@@ -395,6 +395,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1539, 841)
         self.setWindowTitle('Graph Operator')
         self.vertices = []
+        self.arcs = []
         self.directed = False
 
         # Application measure: 1539 x 841
