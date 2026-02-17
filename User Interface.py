@@ -738,10 +738,10 @@ class MainWindow(QMainWindow):
             arc_weight_label.setStyleSheet('''
                 QLabel { 
                     background-color: white;
-                    color: black; 
-                    font-size: 20px;
-                    font-weight: bold;
-                    padding: 3px
+                    color: black;
+                    padding: 3px;
+                    border-style: solid;
+                    border-radius: 5px
                 }
             ''')
             arc_weight_label.adjustSize()
