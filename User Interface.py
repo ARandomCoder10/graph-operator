@@ -923,6 +923,7 @@ class MainWindow(QMainWindow):
                 vertex = QGraphicsItemGroup()
                 vertex.addToGroup(vertex_shape)
                 vertex.addToGroup(vertex_label_proxy)
+                update_style(vertex_label)
                 self.workspace.addItem(vertex)
 
                 #vertex.setFlags(
