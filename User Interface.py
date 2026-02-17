@@ -871,6 +871,11 @@ class MainWindow(QMainWindow):
                 #-------------------------------------------------------
                 #FINAL OPERATIONS
 
+                #Setting the glow/shadow of the vertex text#
+                vertex_name_effect = VertexIdentifierEffect()
+                vertex_name_effect.set_default()
+                vertex_label_proxy.setGraphicsEffect(vertex_name_effect)
+
                 vertex = QGraphicsItemGroup()
                 vertex.addToGroup(vertex_shape)
                 vertex.addToGroup(vertex_label_proxy)
