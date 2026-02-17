@@ -849,42 +849,9 @@ class MainWindow(QMainWindow):
                 vertex_label.setWordWrap(True)
                 vertex_label.setMaximumWidth(150)
                 vertex_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                if len(vertex_label.text()) >= 15:
-                    vertex_label.setStyleSheet('''
-                        QLabel {
-                            font-size: 16px;
-                            background-color: transparent;
-                            font-weight: bold;
-                            color: white;
-                        }
-                    ''')
-                elif len(vertex_label.text()) >= 8:
-                    vertex_label.setStyleSheet('''
-                        QLabel {
-                            font-size: 19px;
-                            background-color: transparent;
-                            font-weight: bold;
-                            color: white;
-                        }
-                    ''')
-                elif len(vertex_label.text()) >= 4:
-                    vertex_label.setStyleSheet('''
-                        QLabel {
-                            font-size: 22px;
-                            background-color: transparent;
-                            font-weight: bold;
-                            color: white;
-                        }
-                    ''')
-                else:
-                    vertex_label.setStyleSheet('''
-                        QLabel {
-                            font-size: 25px;
-                            background-color: transparent;
-                            font-weight: bold;
-                            color: white;
-                        }
-                    ''')
+
+                #Adjusting the text sizing based on length of text entered
+                vertex_label.setStyleSheet(vertex_name_styling('white', len(vertex_name)))
                 update_style(vertex_label)
                 vertex_label.adjustSize()
 
