@@ -821,10 +821,7 @@ class MainWindow(QMainWindow):
             vertex_shape.setZValue(100)
 
             # The placeholder design
-            vertex_shape.setBrush(QBrush(QColor(Qt.GlobalColor.transparent)))
-            outline = QPen(QColor('#0033CC'), 3)
-            outline.setStyle(Qt.PenStyle.DotLine)
-            vertex_shape.setPen(outline)
+            vertex_shape.set_placeholder()
             self.workspace.addItem(vertex_shape)
 
             #THE ADD_VERTEX DIALOG
