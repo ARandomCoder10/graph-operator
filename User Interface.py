@@ -681,7 +681,7 @@ class MainWindow(QMainWindow):
                     break
 
             #Drawing it to the vertices' centres
-            arc = QGraphicsLineItem(
+            arc_line = QGraphicsLineItem(
                 stop_1_x, stop_1_y,
                 stop_2_x, stop_2_y
             )
