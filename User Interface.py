@@ -818,7 +818,7 @@ class MainWindow(QMainWindow):
 
             vertex_shape = QGraphicsEllipseItem(0, 0, 84, 84)
             vertex_shape.setPos(vertex_pos_x - 42, vertex_pos_y - 42)
-            vertex_shape.setZValue(1)
+            vertex_shape.setZValue(100)
 
             # The placeholder design
             vertex_shape.setBrush(QBrush(QColor(Qt.GlobalColor.transparent)))
