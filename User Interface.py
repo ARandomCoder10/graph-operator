@@ -651,7 +651,7 @@ class MainWindow(QMainWindow):
             arc_weight = float(arc_weight) if '.' in arc_weight else int(arc_weight)
 
             #Updating the graph
-            if direction_option == 'Undirected':
+            if direction_option == 'Two-way':
                 self.graph[stop_1][stop_2] = arc_weight
                 self.graph[stop_2][stop_1] = arc_weight
             else:
