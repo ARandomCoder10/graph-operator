@@ -56,6 +56,10 @@ QPushButton[role = 'controlProcess'] {
     border-color: transparent;
 }
 
+QPushButton[role = 'controlProcess'][state = 'constructGraph'] {
+    background-color: #0033CC;
+}
+
 QPushButton[role = 'controlProcess'][state = 'dijkstra'] {
     background-color: #CC00FF;
 }
