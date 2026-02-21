@@ -45,6 +45,25 @@ QPushButton:disabled[state = 'greyed'] {
     background-color: #666666;
 }
 
+QPushButton[role = 'beginAlgorithm'] {
+    background-color: transparent;
+}
+
+QPushButton[role = 'controlProcess'] {
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 0;
+    border-color: transparent;
+}
+
+QPushButton[role = 'controlProcess'][state = 'dijkstra'] {
+    background-color: #CC00FF;
+}
+
+QPushButton[role = 'controlProcess'][state = 'nearestNeighbour'] {
+    background-color: #FF6600;
+}
+
 QLabel {
     font-size: 25px;
 }
