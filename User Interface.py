@@ -403,6 +403,40 @@ class AddArcDialog(QDialog):
         else:
             return None
 
+class SelectRouteDialog(QDialog):
+    def __init__(self, no_of_routes, current_route):
+        super().__init__()
+        self.setWindowTitle('Select the route')
+        label = QLabel('Showing: ')
+        label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        self.route_select = QComboBox()
+        self.route_select.setCurrentText(current_route)
+        for i in range(no_of_routes):
+            self.route_select.addItem(f'Route {i + 1}')
+
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(label)
+        main_layout.addWidget(self.route_select)
+
+        self.ok_button = QPushButton('OK')
+        self.cancel_button = QPushButton('Cancel')
+
+        confirm_layout = QHBoxLayout()
+        confirm_layout.addWidget(self.ok_button)
+        confirm_layout.addWidget(self.cancel_button)
+
+        self.ok_button.clicked.connect(self.accept)
+        self.cancel_button.clicked.connect(self.reject)
+
+        dialog_layout = QVBoxLayout()
+        dialog_layout.addLayout(main_layout)
+        dialog_layout.addLayout(confirm_layout)
+
+        self.setLayout(dialog_layout)
+
+    def get_route(self):
+        return self.route_select.currentIndex()
+
 def update_style(widget):
     widget.style().unpolish(widget)
     widget.style().polish(widget)
