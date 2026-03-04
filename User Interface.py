@@ -64,6 +64,10 @@ QPushButton[role = 'controlProcess'][state = 'dijkstra'] {
     background-color: #CC00FF;
 }
 
+QPushButton[role = 'controlProcess'][state = 'dijkstra']:disabled {
+    background-color: #3E3E3E;
+}
+
 QPushButton[role = 'controlProcess'][state = 'nearestNeighbour'] {
     background-color: #FF6600;
 }
