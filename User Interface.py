@@ -72,6 +72,10 @@ QPushButton[role = 'controlProcess'][state = 'nearestNeighbour'] {
     background-color: #FF6600;
 }
 
+QPushButton[role = 'controlProcess'][state = 'nearestNeighbour']:disabled {
+    background-color: #7F7F7F;
+}
+
 QLabel {
     font-size: 25px;
 }
