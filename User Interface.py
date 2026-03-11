@@ -1067,12 +1067,9 @@ class MainWindow(QMainWindow):
                 vertex_text.document().setDefaultTextOption(opt)
                 vertex_text.update()
 
-                #Setting the visible proxy
-                vertex_label_proxy = QGraphicsProxyWidget()
-                vertex_label_proxy.setWidget(vertex_label)
-                vertex_label_proxy.setZValue(200)
-                vertex_label_proxy.setPos(vertex_pos_x - vertex_label.width() // 2,
-                                          vertex_pos_y - vertex_label.height() // 2)
+                vertex_text.setZValue(200)
+                vertex_text.setPos(vertex_pos_x - vertex_text.boundingRect().width() // 2,
+                                    vertex_pos_y - vertex_text.boundingRect().height() // 2)
 
                 #-------------------------------------------------------
                 #FINAL OPERATIONS
