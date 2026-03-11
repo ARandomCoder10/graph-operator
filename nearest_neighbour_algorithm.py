@@ -246,49 +246,13 @@ for tour in final_tours:
                             final_tours.pop(len(final_tours) - i - 1)
                             break
         else:
-            tour.append(False)
-        #This will label all the false ones...
-
-    #...so this one can catch the True ones, which are currently unmarked
-    for tour in final_tours:
-        if len(tour) == 2:
-            tour.append(True)
-
-#-----------------------------------------------------
-end = perf_counter()
-print(f'RUNTIME: {end - start}s')
-#-----------------------------------------------------
-
-#If no tours, unsolvable
-#If 1 tour, already sorted and abstracted
-if len(final_tours) >= 2:
-
-    # Removing the extra unnecessary tour branches
-
-    #A temporary dictionary to store the weights of each tour
-    tour_weights = {}
-
-    vertices = [principal] if principal_specified else graph.keys()
-    for vertex in vertices:
-
-        tour_weights[vertex] = []
-
-    for tour in final_tours:
-        tour_weights[tour[0][0]].append(tour[1])
-
-    #final_tours without the extra tours
-    final_tours_abstracted = []
-
-    for vertex, collection in tour_weights.items():
-        try:
-            minimum = min(collection)
-        except ValueError:
-            #In the event that no tour was possible from such vertex
-            continue
-
-        for tour in final_tours:
-            if tour[0][0] == vertex and tour[1] == minimum:
-                final_tours_abstracted.append(deepcopy(tour))
+            # Reversing all undirected tours and adding them
+            final_tours_full = deepcopy(final_tours)
+            for tour in final_tours:
+                # Can replicate an already-stored tour if the tour was found from identical arc weights
+                if [tour[0][::-1], tour[1]] not in final_tours:
+                    final_tours_full.append([tour[0][::-1], tour[1]])
+            final_tours = deepcopy(final_tours_full)
 
     final_tours = deepcopy(final_tours_abstracted)
 
