@@ -152,13 +152,8 @@ def text_styling(object, text, text_color):
         else:
             html = html.replace('--', '25')
 
-    #The length of the text
-    if text_length >= 15:
-        style = style.replace('--', '16')
-    elif text_length >= 8:
-        style = style.replace('--', '19')
-    elif text_length >= 4:
-        style = style.replace('--', '22')
+        html = html.replace(']]]]]', '')
+
     else:
         style = style.replace('--', '25')
 
