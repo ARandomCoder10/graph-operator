@@ -83,7 +83,7 @@ QLabel[type = 'prompt_bar'] {
     font-size: 25px;
 }
 
-QLabel[type = 'prompt_bar'][role = 'construct_graph'] {
+QLabel[type = 'promptBar'][state = 'constructGraph'] {
     border-color: #0033CC;
     color: #0033CC;
 }
