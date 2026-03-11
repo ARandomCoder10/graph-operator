@@ -1005,10 +1005,11 @@ class MainWindow(QMainWindow):
                 self.prompt_bar.setText('Select your <strong>start-and-return</strong> stop')
 
             #Styling every vertex
-            for vertex in self.vertices:
-                vertex[0].set_algorithm_unselected('#CC00FF')
-                vertex[1].widget().setStyleSheet(
-                    vertex_name_styling('#CC00FF', len(vertex[1].widget().text()))
+            for vertex in self.vertices.values():
+                vertex[0].childItems()[0].set_algorithm_unselected(
+                    self.theme_properties[self.current_algorithm]['hex_color'])
+                vertex[0].childItems()[1].setHtml(
+                    text_styling('vertex', text_item_to_string(vertex[0].childItems()[1]), self.theme_properties[self.current_algorithm]['hex_color'])
                 )
                 update_style(vertex[1].widget())
                 vertex[1].graphicsEffect().set_algorithm_unselected()
