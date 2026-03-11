@@ -1,5 +1,3 @@
-
-
 # Data from the June 2022 Question 3
 #graph = {
 #    'A': {'B': 12.0, 'C': 24.0, 'D': 20.0, 'E': 23.0, 'F': 11.0},
@@ -266,29 +264,4 @@ def solve(graph, directed, principal):
     return final_tours
 
 #Algorithm fully works!
-#pass
-
-# Data from the June 2022 Question 3
-graph = {
-    'A': {'B': 12.0, 'C': 24.0, 'D': 20.0, 'E': 23.0, 'F': 11.0},
-    'B': {'A': 12.0, 'C': 12.0, 'D': 8.0, 'E': 24.0, 'F': 21.0},
-    'C': {'A': 28.0, 'B': 2.0, 'D': 4.0, 'E': 12.0, 'F': 2.0},
-    'D': {'A': 24.0, 'B': 21.0, 'C': 4.0, 'E': 16.0, 'F': 13.0},
-    'E': {'A': 23.0, 'B': 29.0, 'C': 12.0, 'D': 16.0, 'F': 12.0},
-    'F': {'A': 11.0, 'B': 23.0, 'C': 17.0, 'D': 13.0, 'E': 12.0},
-}
-directed = True
-
-#letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-#graph = {}
-#n = 4
-
-#for key in letters[:n]:
-#    graph[key] = {}
-#    for vertex in letters[:n]:
-#        if vertex != key:
-#            graph[key][vertex] = 1.0
-#directed = False
-
-final_tours = solve(graph, directed, 'B')
 pass
