@@ -371,6 +371,7 @@ class AddArcDialog(QDialog):
         self.undirected_choice.setDisabled(loop_present)
         self.route_1.setDisabled(loop_present)
         self.route_2.setDisabled(loop_present)
+        self.ok_button.setDisabled(loop_present)
 
     def show_directed_routes(self, option):
         if option.text() == 'One-way':
