@@ -611,8 +611,12 @@ class MainWindow(QMainWindow):
 
         #Exit process (1.16 x 5.4)
         self.exit_button = QPushButton(self)
-        self.exit_button.setText('Exit process')
-        self.exit_button.setFixedSize(245, 51)
+        self.exit_button.setFixedSize(51, 51)
+        self.exit_button.setIcon(QIcon(r'icons\exit.png'))
+        self.exit_button.setIconSize(QSize(36, 36))
+        self.exit_button.setProperty('role', 'controlProcess')
+        update_style(self.exit_button)
+        self.exit_button.setToolTip('Exit')
         self.exit_button.hide()
 
         #Setting the horizontal layout
