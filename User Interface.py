@@ -666,6 +666,29 @@ class MainWindow(QMainWindow):
         #--------------------------------------------------------------------------
         #FUNCTION OPERATION
 
+        self.route_label = QLabel(self)
+        self.route_label.setFixedSize(215, 51)
+        self.route_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.route_label.setProperty('type', 'promptBar')
+        update_style(self.route_label)
+        self.route_label.hide()
+
+        self.route_drop_down = QPushButton(self)
+        self.route_drop_down.setFixedSize(34, 51)
+        self.route_drop_down.setProperty('type', 'dropDown')
+        update_style(self.route_drop_down)
+        self.route_drop_down.clicked.connect(self.select_route)
+        self.route_drop_down.setToolTip('Select a route to be displayed')
+        self.route_drop_down.hide()
+
+        self.replay_route_button = QPushButton(self)
+        self.replay_route_button.setFixedSize(51, 51)
+        self.replay_route_button.setIcon(QIcon(r'icons\replay.png'))
+        self.replay_route_button.setIconSize(QSize(36, 36))
+        self.replay_route_button.clicked.connect(self.display_route)
+        self.replay_route_button.setToolTip('Replay the route display')
+        self.replay_route_button.hide()
+
         self.dijkstra_button.setEnabled(True)
         self.nearest_neighbour_button.setEnabled(True)
 
