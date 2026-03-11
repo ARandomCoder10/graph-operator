@@ -223,6 +223,7 @@ class AddArcDialog(QDialog):
 
         #Checking for loops
         self.stop_1.currentIndexChanged.connect(self.loop_check)
+        self.stop_1.currentIndexChanged.connect(self.arc_presence_check)
         self.stop_2.currentIndexChanged.connect(self.loop_check)
 
         #The layout
