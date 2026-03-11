@@ -792,6 +792,42 @@ class MainWindow(QMainWindow):
         self.add_vertex_button.setEnabled(True)
         self.add_arc_button.setEnabled(True)
 
+        self.add_vertex_button.blockSignals(False)
+        self.add_arc_button.blockSignals(False)
+
+        self.prompt_bar.hide()
+        self.exit_button.hide()
+
+        self.add_vertex_active = False
+
+        if self.algorithm_vertex_select or self.algorithm_route_display:
+            #Redisplaying the vertices
+            for vertex in self.vertices.values():
+                vertex_shape, vertex_text = vertex[0].childItems()[0], vertex[0].childItems()[1]
+
+                vertex_shape.set_default()
+                vertex_text.setHtml(text_styling('vertex',
+                                                 text_item_to_string(vertex_text),
+                                                 'white'))
+                vertex_text.graphicsEffect().set_default()
+
+                vertex[0].setVisible(True)
+
+            #Redisplaying the arcs
+            for connected_vertex in self.arcs.values():
+                for arc_graphics in connected_vertex.values():
+                    arc_graphics.childItems()[1].setHtml(text_styling('arc',
+                                                                      text_item_to_string(arc_graphics.childItems()[1]),
+                                                                      'black'))
+                    arc_graphics.setVisible(True)
+
+            #Removing the algorithm-specific widgets
+            self.prompt_bar.setFixedWidth(1022)
+            self.route_label.hide()
+            self.route_drop_down.hide()
+            self.replay_route_button.hide()
+
+        #Renabling the buttons
         self.dijkstra_button.setEnabled(True)
         self.nearest_neighbour_button.setEnabled(True)
         self.dijkstra_button.blockSignals(False)
