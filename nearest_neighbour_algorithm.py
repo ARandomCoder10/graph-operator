@@ -254,27 +254,12 @@ for tour in final_tours:
                     final_tours_full.append([tour[0][::-1], tour[1]])
             final_tours = deepcopy(final_tours_full)
 
-    final_tours = deepcopy(final_tours_abstracted)
-
-    #Sorting the tours
-
-    #Gathering the total_weights
-    total_weights = []
-    for tour in final_tours:
-        total_weights.append(tour[1])
-
-    #Then finding the tour associated with the minimum
-    final_tours_ordered = []
-
-    while total_weights != []:
-        #Searching...
-        minimum_total = min(total_weights)
+        pass
+        #Data storage optimisation
+        final_tours_optimised = [[], minimum_tour_weight]
         for tour in final_tours:
-            if tour[1] == minimum_total and tour not in final_tours_ordered:
-                final_tours_ordered.append(deepcopy(tour))
-                #Set it up for the next minimum
-                total_weights.remove(minimum_total)
-                break
+            final_tours_optimised[0].append(tour[0])
+        final_tours = deepcopy(final_tours_optimised)
 
     final_tours = deepcopy(final_tours_ordered)
 
