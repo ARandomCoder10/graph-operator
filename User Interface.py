@@ -487,8 +487,14 @@ def update_style(widget):
     widget.style().polish(widget)
     widget.repaint()
 
-def reading_time():
-    pass
+def text_item_to_string(item):
+    string = item.document().toPlainText().strip(' ')
+    return string
+
+def wait():
+    wait_time = QEventLoop()
+    QTimer.singleShot(1250, wait_time.exit)
+    wait_time.exec()
 
 #class Workspace(QGraphicsScene):
 #    def __init__(self):
