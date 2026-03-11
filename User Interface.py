@@ -1,6 +1,4 @@
-import sys
-from turtledemo.penrose import start
-from copy import deepcopy
+import dijkstra_algorithm, nearest_neighbour_algorithm
 
 import dijkstra_algorithm
 
