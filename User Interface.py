@@ -350,6 +350,8 @@ class AddArcDialog(QDialog):
 
         self.setWindowFlag(Qt.WindowType.WindowCloseButtonHint, False)
 
+        self.arc_presence_check()
+
     #Preventing a loop
     def loop_check(self):
         loop_present = self.stop_1.currentIndex() == self.stop_2.currentIndex()
