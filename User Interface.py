@@ -890,12 +890,12 @@ class MainWindow(QMainWindow):
             #Finding the positions of each vertex
             for vertex in self.vertices:
                 #If the text is met...
-                if vertex[1].widget().text() == stop_1:
-                    stop_1_x = vertex[2][0]
-                    stop_1_y = vertex[2][1]
-                elif vertex[1].widget().text() == stop_2:
-                    stop_2_x = vertex[2][0]
-                    stop_2_y = vertex[2][1]
+                if text_item_to_string(vertex[0].childItems()[1]) == stop_1:
+                    stop_1_x = vertex[1][0]
+                    stop_1_y = vertex[1][1]
+                elif text_item_to_string(vertex[0].childItems()[1]) == stop_2:
+                    stop_2_x = vertex[1][0]
+                    stop_2_y = vertex[1][1]
                 #Once both are found, stop the search
                 if '' not in (stop_1_x, stop_1_y, stop_2_x, stop_2_y):
                     break
