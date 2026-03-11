@@ -670,8 +670,23 @@ class MainWindow(QMainWindow):
         self.nearest_neighbour_button.setEnabled(True)
 
         self.add_vertex_active = False
-        self.dijkstra_active = False
-        self.nearest_neighbour_active = False
+
+        self.algorithm_vertex_select = False
+        self.algorithm_route_display = False
+
+        #For better styling and retrieval
+        self.theme_properties = {
+            'dijkstra': {
+                'hex_color': '#CC00FF',
+                'rgb_color': QColor(204, 0, 255, 255),
+                'style_id': 'dijkstra'
+            },
+            'nearest_neighbour': {
+                'hex_color': '#FF6600',
+                'rgb_color': QColor(255, 102, 0, 255),
+                'style_id': 'nearestNeighbour'
+            }
+        }
 
         # the two states of selection
         self.dijkstra_state = 'origin'
