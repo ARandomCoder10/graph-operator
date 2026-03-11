@@ -1104,11 +1104,8 @@ class MainWindow(QMainWindow):
             vertex_text = self.workspace.selectedItems()[0].childItems()[1]
             vertex_text_str = text_item_to_string(vertex_text)
 
-            #Getting the origin and destination
-            for vertex in self.vertices:
-                #If the click is within the vertex dimensions
-                if vertex[2][0] - 42 <= click_pos_x <= vertex[2][0] + 42 and (
-                        vertex[2][1] - 42 <= click_pos_y <= vertex[2][1] + 42):
+            if self.algorithm_vertex_select:
+                vertex_shape.set_algorithm_selected(self.theme_properties[self.current_algorithm]['hex_color'])
 
                     #Styling the selected verticees
                     vertex[0].set_algorithm_selected('#CC00FF')
