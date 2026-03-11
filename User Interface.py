@@ -268,7 +268,6 @@ class AddArcDialog(QDialog):
         self.direction_option = QButtonGroup()
         self.directed_choice = QRadioButton('One-way')
         self.undirected_choice = QRadioButton('Two-way')
-        self.undirected_choice.setChecked(True) #Preset value
 
         self.direction_option.addButton(self.directed_choice)
         self.direction_option.addButton(self.undirected_choice)
