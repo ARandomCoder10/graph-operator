@@ -1085,10 +1085,9 @@ class MainWindow(QMainWindow):
                 update_style(vertex_label)
                 self.workspace.addItem(vertex)
 
-                # vertex.setFlags(
-                #    QGraphicsItem.GraphicsItemFlag.ItemIsMovable |
-                #    QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-                # )
+                vertex.setFlags(
+                    QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+                )
 
                 self.graph[vertex_name] = {}
                 self.vertices.append([vertex_shape, vertex_label_proxy, [vertex_pos_x, vertex_pos_y]])
