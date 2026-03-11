@@ -376,7 +376,7 @@ class AddArcDialog(QDialog):
     def show_directed_routes(self, option):
         if option.text() == 'One-way':
             #Showing the route options
-            self.main_layout.addWidget(self.direction_route_container)
+            self.main_layout.insertWidget(5, self.direction_route_container)
             self.route_1.show()
             self.route_2.show()
         else:
