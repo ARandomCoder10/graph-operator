@@ -1020,9 +1020,8 @@ class MainWindow(QMainWindow):
             update_style(self.prompt_bar)
             self.prompt_bar.show()
 
-            self.exit_button.setText('Exit algorithm')
-            self.exit_button.setProperty('type', 'exit')
-            self.exit_button.setProperty('role', 'dijkstra')
+            self.exit_button.setProperty('role', 'controlProcess')
+            self.exit_button.setProperty('state', self.theme_properties[self.current_algorithm]['style_id'])
             update_style(self.exit_button)
             self.exit_button.show()
             self.exit_button.clicked.connect(self.exit_process)
