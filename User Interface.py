@@ -1125,10 +1125,26 @@ class MainWindow(QMainWindow):
                         self.dijkstra_results = dijkstra_algorithm.solve(self.graph, self.directed,
                                                                          self.dijkstra_origin)
 
-                    #Stage 2: Selecting the destination & isolating the results
-                    elif self.dijkstra_origin != vertex[1].widget().text():
-                        self.dijkstra_destination = vertex[1].widget().text()
-                        self.dijkstra_results = self.dijkstra_results[self.dijkstra_destination]
+                    # Stage 2: Selecting the destination & isolating the results
+                    elif self.dijkstra_origin != vertex_text_str:
+                        self.dijkstra_destination = vertex_text_str
+                        self.algorithm_results = self.dijkstra_results[self.dijkstra_destination]
+
+                        self.algorithm_mouseclick_active = False
+                        self.algorithm_process_active = True
+                        QTimer.singleShot(0, self.continue_algorithm) #Waiting for the event to finish
+
+                elif self.current_algorithm == 'nearest_neighbour':
+                    self.nearest_neighbour_start_and_return = vertex_text_str
+                    self.algorithm_results = nearest_neighbour_algorithm.solve(self.graph, self.directed, self.nearest_neighbour_start_and_return)
+                    self.algorithm_vertex_select = False
+                    self.algorithm_route_display = True
+                    QTimer.singleShot(0, self.continue_algorithm)
+
+    def continue_algorithm(self):
+        for item in self.workspace.selectedItems():
+            if isinstance(item, QGraphicsItemGroup):
+                item.clearFocus()
 
         #[ [[pathway], [pathway], [pathway]], total_weight]
         if (self.current_algorithm == 'dijkstra' and self.algorithm_results[1] != float('inf')) or (
