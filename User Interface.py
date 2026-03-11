@@ -225,6 +225,7 @@ class AddArcDialog(QDialog):
         self.stop_1.currentIndexChanged.connect(self.loop_check)
         self.stop_1.currentIndexChanged.connect(self.arc_presence_check)
         self.stop_2.currentIndexChanged.connect(self.loop_check)
+        self.stop_2.currentIndexChanged.connect(self.arc_presence_check)
 
         #The layout
         stop_input_layout = QHBoxLayout()
