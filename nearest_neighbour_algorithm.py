@@ -74,40 +74,28 @@ from time import perf_counter
 start = perf_counter()
 #-----------------------------------------------------
 
-final_tours = []
-graphs = [deepcopy(graph)]
+from copy import deepcopy
+def solve(graph, directed, principal):
 
-principal_specified = False
-principal = ''
-
-# Getting the other graph representation
-if directed:
-    graph_b = {}
-
-    #Making a key for every vertex
-    for graph_vertex in graph:
-        graph_b[graph_vertex] = {}
-
-    #Adding the arc weights
-    for graph_vertex in graph:
-        for arc_vertex, arc_weight in graph[graph_vertex].items():
-            if graph_vertex in graph[arc_vertex]: #Checking against one-way directed arcs
-                graph_b[arc_vertex][graph_vertex] = arc_weight
-
-    graphs.append(graph_b)
-
-#Starting at each vertex
-for start_vertex in graph:
-
-    #If they chose to explore all possibilities...
-    if not principal_specified:
-        principal = start_vertex
-    #If they chose to specify the start & return, continue until found
-    elif start_vertex != principal:
-        continue
-
-    pass
-
+    final_tours = []
+    graphs = [deepcopy(graph)]
+    
+    # Getting the other graph representation
+    if directed:
+        graph_b = {}
+    
+        #Making a key for every vertex
+        for graph_vertex in graph:
+            graph_b[graph_vertex] = {}
+    
+        #Adding the arc weights
+        for graph_vertex in graph:
+            for arc_vertex, arc_weight in graph[graph_vertex].items():
+                if graph_vertex in graph[arc_vertex]: #Checking against one-way directed arcs
+                    graph_b[arc_vertex][graph_vertex] = arc_weight
+    
+        graphs.append(graph_b)
+    
     #Operating on each transposition
     #the state to know which transposition
     for state, graph in enumerate(graphs):
