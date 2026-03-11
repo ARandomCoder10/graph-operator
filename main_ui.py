@@ -424,6 +424,9 @@ class AddArcDialog(QDialog):
         if self.arc_weight_input.text() == '':
             self.arc_weight_input_warning.setText('Please enter a number.')
             self.arc_weight_input_warning.show()
+        elif float(self.arc_weight_input.text()) == 0:
+            self.arc_weight_input_warning.setText('Please enter a positive number.')
+            self.arc_weight_input_warning.show()
         else:
             self.accept()
 
