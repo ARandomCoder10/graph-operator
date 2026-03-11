@@ -900,6 +900,42 @@ class MainWindow(QMainWindow):
                 if '' not in (stop_1_x, stop_1_y, stop_2_x, stop_2_y):
                     break
 
+
+            if direction_option == 'One-way':
+                #If                   this arc and its direction isn't present...         but there is an arc going the opposite way
+                if (directed_route == f'{stop_1} → {stop_2}' and stop_2 not in self.arcs[stop_1] and stop_1 in self.arcs[stop_2]) or (
+                    directed_route == f'{stop_2} → {stop_1}' and stop_1 not in self.arcs[stop_2] and stop_2 in self.arcs[stop_1]):
+
+                    #Retrieving the arc going the other way
+                    if directed_route == f'{stop_1} → {stop_2}':
+                        arc = self.arcs[stop_2][stop_1].childItems()[0]
+                        arc_weight_text = self.arcs[stop_2][stop_1].childItems()[1]
+
+                    elif directed_route == f'{stop_2} → {stop_1}':
+                        arc = self.arcs[stop_1][stop_2].childItems()[0]
+                        arc_weight_text = self.arcs[stop_1][stop_2].childItems()[1]
+
+                    arc_line = arc.line()
+
+                    #Getting the bounding coordinates
+                    start_point_x = arc_line.p1().x()
+                    start_point_y = arc_line.p1().y()
+                    end_point_x = arc_line.p2().x()
+                    end_point_y = arc_line.p2().y()
+
+                    #Altering the position & redrawing the arc
+                    arc.setLine(start_point_x, start_point_y - 25,
+                                end_point_x, end_point_y - 25)
+                    arc.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
+                    arc.update()
+
+                    #Altering the position of the arc_weight_text
+                    arc_weight_text.moveBy(0, -25)
+
+                    #Setting the position of the new arc
+                    stop_1_y += 25
+                    stop_2_y += 25
+
             #Drawing it to the vertices' centres
             arc_line = QGraphicsLineItem(
                 stop_1_x, stop_1_y,
