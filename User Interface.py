@@ -301,6 +301,8 @@ class AddArcDialog(QDialog):
         directed_route_layout.addWidget(self.route_2)
         directed_route_layout.setContentsMargins(20, 0, 0, 0) #A small indent
 
+        self.directed_routes.buttonToggled.connect(self.arc_presence_check)
+
         self.direction_route_container = QWidget(self)
         self.direction_route_container.setLayout(directed_route_layout)
 
