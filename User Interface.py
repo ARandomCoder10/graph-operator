@@ -1024,11 +1024,11 @@ class MainWindow(QMainWindow):
 
             self.exit_process()
 
-        elif self.dijkstra_active:
-            global_pos = event.globalPosition().toPoint()
-            view_pos = self.view.mapFromGlobal(global_pos)
-            scene_pos = self.view.mapToScene(view_pos)
-            click_pos_x, click_pos_y = int(scene_pos.x()), int(scene_pos.y())
+    def scene_item_selected(self):
+        if self.workspace.selectedItems() != []:
+            vertex_shape = self.workspace.selectedItems()[0].childItems()[0]
+            vertex_text = self.workspace.selectedItems()[0].childItems()[1]
+            vertex_text_str = text_item_to_string(vertex_text)
 
             #Getting the origin and destination
             for vertex in self.vertices:
