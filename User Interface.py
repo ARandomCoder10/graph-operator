@@ -1003,11 +1003,14 @@ class MainWindow(QMainWindow):
             arc.setZValue(-100)
             self.workspace.addItem(arc)
 
-            # vertex.setFlags(
-            #    QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-            # )
-
-            self.arcs.append([arc_line, arc_weight_proxy, [stop_1, stop_2], directed_route])
+            if direction_option == 'Two-way':
+                self.arcs[stop_1][stop_2] = arc
+                self.arcs[stop_2][stop_1] = arc
+            else:
+                if directed_route == f'{stop_1} → {stop_2}':
+                    self.arcs[stop_1][stop_2] = arc
+                else:
+                    self.arcs[stop_2][stop_1] = arc
 
         self.exit_process()
 
