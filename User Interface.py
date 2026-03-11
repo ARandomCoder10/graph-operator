@@ -858,7 +858,7 @@ class MainWindow(QMainWindow):
         self.isolate_role(self.add_arc_button)
 
         #Displaying the add_arc dialog
-        add_arc_dialog = AddArcDialog(list(self.graph.keys()))
+        add_arc_dialog = AddArcDialog(list(self.graph.keys()), self.arcs)
 
         if add_arc_dialog.exec() == QDialog.DialogCode.Accepted:
 
