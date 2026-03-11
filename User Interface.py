@@ -993,8 +993,16 @@ class MainWindow(QMainWindow):
 
     def algorithm_initiation(self, algorithm):
         if len(self.vertices) >= 2:
-            self.isolate_role('dijkstra')
-            self.dijkstra_active = True
+            self.algorithm_vertex_select = True
+            self.current_algorithm = algorithm
+
+            if self.current_algorithm == 'dijkstra':
+                self.isolate_role(self.dijkstra_button)
+                self.dijkstra_state = 'origin'
+                self.prompt_bar.setText('Select your <strong>origin</strong>')
+            else:
+                self.isolate_role(self.nearest_neighbour_button)
+                self.prompt_bar.setText('Select your <strong>start-and-return</strong> stop')
 
             #Styling every vertex
             for vertex in self.vertices:
