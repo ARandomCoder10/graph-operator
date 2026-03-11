@@ -989,20 +989,9 @@ class MainWindow(QMainWindow):
 
                 arc_weight_label.setText(f'{str(arc_weight)} {arrow}')
             else:
-                arc_weight_label.setText(str(arc_weight))
-
-            arc_weight_label.setStyleSheet('''
-                QLabel {
-                    font-weight: bold;
-                    font-size: 20px;
-                    background-color: white;
-                    color: black;
-                    padding: 3px;
-                    border-style: solid;
-                    border-radius: 5px
-                }
-            ''')
-            update_style(arc_weight_label)
+                arc_weight_text.setHtml(text_styling('arc', str(arc_weight), 'black'))
+            # Force repaint
+            arc_weight_text.update()
 
             arc_weight_label.adjustSize()
             arc_weight_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
