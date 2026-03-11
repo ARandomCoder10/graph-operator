@@ -641,6 +641,8 @@ class MainWindow(QMainWindow):
         self.dijkstra_button.setIcon(QIcon(r'icons\dijkstra.png'))
         self.dijkstra_button.setIconSize(QSize(91, 91))
         self.dijkstra_button.setToolTip('Find the shortest path from one stop to another')
+        self.dijkstra_button.setProperty('role', 'beginAlgorithm')
+        update_style(self.dijkstra_button)
 
         #Nearest Neighbour icon (2 x 2)
         self.nearest_neighbour_button = QPushButton(self)
