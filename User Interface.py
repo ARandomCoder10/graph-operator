@@ -504,8 +504,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setMinimumSize(1539, 841)
         self.setWindowTitle('Graph Operator')
-        self.vertices = []
-        self.arcs = []
+        self.vertices = {} #Referencing each vertex by its identifier
+        self.arcs = {} #Referencing each arc by its connected stops
         self.directed = False
 
         # Application measure: 1539 x 841
