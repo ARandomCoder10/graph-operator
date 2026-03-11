@@ -842,8 +842,8 @@ class MainWindow(QMainWindow):
 
         #Setting the label
         self.prompt_bar.setText('<strong>Click anywhere</strong> to place a <strong>stop</strong>')
-        self.prompt_bar.setProperty('type', 'prompt_bar')
-        self.prompt_bar.setProperty('role', 'construct_graph')
+        self.prompt_bar.setProperty('type', 'promptBar')
+        self.prompt_bar.setProperty('state', 'constructGraph')
         update_style(self.prompt_bar)
         self.prompt_bar.show()
 
