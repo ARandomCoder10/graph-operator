@@ -79,8 +79,7 @@ QLabel {
 QLabel[type = 'promptBar'], QPushButton[type = 'dropDown'] {
     border-style: solid;
     border-width: 3px;
-    border-radius: 18px;
-    font-size: 25px;
+    border-radius: 16px;
 }
 
 QLabel[type = 'promptBar'][state = 'constructGraph'] {
