@@ -848,8 +848,8 @@ class MainWindow(QMainWindow):
         self.prompt_bar.show()
 
         #Setting the exit button
-        self.exit_button.setProperty('type', 'exit')
-        self.exit_button.setProperty('role', 'construct_graph')
+        self.exit_button.setProperty('role', 'controlProcess')
+        self.exit_button.setProperty('state', 'constructGraph')
         update_style(self.exit_button)
         self.exit_button.show()
         self.exit_button.clicked.connect(self.exit_process)
