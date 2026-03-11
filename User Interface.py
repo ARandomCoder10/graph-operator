@@ -780,35 +780,12 @@ class MainWindow(QMainWindow):
         self.nearest_neighbour_button.clicked.connect(lambda : self.algorithm_initiation('nearest_neighbour'))
 
     def isolate_role(self, role):
-        #Disabling the buttons
-        self.add_vertex_button.setEnabled(False)
-        self.add_arc_button.setEnabled(False)
-
-        #Highlighting the appropriate function
-        match role:
-            case 'add_vertex':
-                self.add_vertex_button.setProperty('state', 'highlighted')
-                self.add_arc_button.setProperty('state', 'greyed')
-                self.dijkstra_button.setEnabled(False)
-                self.nearest_neighbour_button.setEnabled(False)
-            case 'add_arc':
-                self.add_arc_button.setProperty('state', 'highlighted')
-                self.add_vertex_button.setProperty('state', 'greyed')
-                self.dijkstra_button.setEnabled(False)
-                self.nearest_neighbour_button.setEnabled(False)
-            case 'dijkstra':
-                self.add_vertex_button.setProperty('state', 'greyed')
-                self.add_arc_button.setProperty('state', 'greyed')
-                self.dijkstra_button.blockSignals(True)
-                self.nearest_neighbour_button.setEnabled(False)
-            case 'nearest_neighbour':
-                self.add_vertex_button.setProperty('state', 'greyed')
-                self.add_arc_button.setProperty('state', 'greyed')
-                self.dijkstra_button.setEnabled(False)
-                self.nearest_neighbour_button.blockSignals(True)
-
-        update_style(self.add_vertex_button)
-        update_style(self.add_arc_button)
+        for process in (
+                self.add_vertex_button, self.add_arc_button, self.dijkstra_button, self.nearest_neighbour_button):
+            if role == process:
+                process.blockSignals(True)
+            else:
+                process.setEnabled(False)
 
     def exit_process(self):
         #Resetting the interface
