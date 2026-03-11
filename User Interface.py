@@ -641,6 +641,8 @@ class MainWindow(QMainWindow):
         self.add_vertex_button = QPushButton(self)
         self.add_vertex_button.setText('Add a stop')
         self.add_vertex_button.setFixedSize(160, 51)
+        self.add_vertex_button.setProperty('role', 'constructGraph')
+        update_style(self.add_vertex_button)
 
         #Add a path (3.96 x 1.16)
         self.add_arc_button = QPushButton(self)
