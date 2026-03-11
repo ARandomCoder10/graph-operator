@@ -833,8 +833,8 @@ class MainWindow(QMainWindow):
         self.dijkstra_button.blockSignals(False)
         self.nearest_neighbour_button.blockSignals(False)
 
-        self.prompt_bar.hide()
-        self.exit_button.hide()
+        self.algorithm_vertex_select = False
+        self.algorithm_route_display = False
 
     def adding_a_vertex(self):
         self.isolate_role('add_vertex')
