@@ -168,31 +168,38 @@ def solve(graph, directed, principal):
             elif branch[leaf][1] == results[leaf][1] and branch[leaf][0] not in results[leaf][0]:
                 results[leaf][0].append(branch[leaf][0])
 
-    print(results)
-
-
-    #A small sorting algorithm ordering the pathways based on length/number of stops
+    #A small insertion sort ordering the pathways based on length/number of stops
     sorted_results = {}
     for vertex, branches in results.items():
-        print(vertex)
-        print(branches)
         pathways = branches[0]
-        print(pathways)
         sorted_pathways = [pathways[0]]
 
         #For each pathway
         for pathway in pathways[1:]:
             #Checking each sorted pathway
             for i, sorted_pathway in enumerate(sorted_pathways):
-                if len(sorted_pathway) > len(pathway):
+
+                #Adding the pathway before the next larger one
+                if len(sorted_pathway) >= len(pathway):
                     sorted_pathways.insert(i, pathway)
+                #Or if it is the largest pathway
                 elif i == len(sorted_pathways) - 1:
                     sorted_pathways.append(pathway)
-            print(sorted_pathways)
-        sorted_results[vertex] = [sorted_pathways, branches[1]]
+                break #to prevent dynamic updates & an infinite loop
+
+        sorted_results[vertex] = [deepcopy(sorted_pathways), branches[1]]
 
     results = deepcopy(sorted_results)
-    print(results)
 
     #Returning the final results
     return results
+
+#graph = {
+#    'A': {'B': 12, 'D': 6, 'E': 23},
+#    'B': {'A': 12, 'C': 9},
+#    'C': {'B': 9, 'E': 2},
+#    'D': {'A': 6, 'E': 17},
+#    'E': {'A': 23, 'C': 2, 'D': 17},
+#}#
+
+#print(solve(graph, False, 'A'))

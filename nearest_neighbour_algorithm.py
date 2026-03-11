@@ -1,29 +1,29 @@
-from copy import deepcopy
+
 
 # Data from the June 2022 Question 3
-graph = {
-    'A': {'B': 12.0, 'C': 24.0, 'D': 20.0, 'E': 23.0, 'F': 11.0},
-    'B': {'A': 12.0, 'C': 12.0, 'D': 8.0, 'E': 24.0, 'F': 21.0},
-    'C': {'A': 28.0, 'B': 2.0, 'D': 4.0, 'E': 12.0, 'F': 2.0},
-    'D': {'A': 24.0, 'B': 21.0, 'C': 4.0, 'E': 16.0, 'F': 13.0},
-    'E': {'A': 23.0, 'B': 29.0, 'C': 12.0, 'D': 16.0, 'F': 12.0},
-    'F': {'A': 11.0, 'B': 23.0, 'C': 17.0, 'D': 13.0, 'E': 12.0},
-}
-directed = True
+#graph = {
+#    'A': {'B': 12.0, 'C': 24.0, 'D': 20.0, 'E': 23.0, 'F': 11.0},
+#    'B': {'A': 12.0, 'C': 12.0, 'D': 8.0, 'E': 24.0, 'F': 21.0},
+#    'C': {'A': 28.0, 'B': 2.0, 'D': 4.0, 'E': 12.0, 'F': 2.0},
+#    'D': {'A': 24.0, 'B': 21.0, 'C': 4.0, 'E': 16.0, 'F': 13.0},
+#    'E': {'A': 23.0, 'B': 29.0, 'C': 12.0, 'D': 16.0, 'F': 12.0},
+#    'F': {'A': 11.0, 'B': 23.0, 'C': 17.0, 'D': 13.0, 'E': 12.0},
+#}
+#directed = True
 
 # Data from the June 2024 Question 2
-graph = {
-    'A': {'B': 50.0, 'C': 59.0, 'D': 26.0, 'E': 50.0, 'F': 40.0, 'G': 87.0, 'H': 63.0, 'J': 59.0},
-    'B': {'A': 50.0, 'C': 28.0, 'D': 61.0, 'E': 79.0, 'F': 63.0, 'G': 45.0, 'H': 64.0, 'J': 48.0},
-    'C': {'A': 59.0, 'B': 28.0, 'D': 33.0, 'E': 57.0, 'F': 35.0, 'G': 70.0, 'H': 36.0, 'J': 45.0},
-    'D': {'A': 26.0, 'B': 61.0, 'C': 33.0, 'E': 24.0, 'F': 64.0, 'G': 71.0, 'H': 37.0, 'J': 33.0},
-    'E': {'A': 50.0, 'B': 79.0, 'C': 57.0, 'D': 24.0, 'F': 40.0, 'G': 64.0, 'H': 30.0, 'J': 31.0},
-    'F': {'A': 40.0, 'B': 63.0, 'C': 35.0, 'D': 64.0, 'E': 40.0, 'G': 47.0, 'H': 70.0, 'J': 71.0},
-    'G': {'A': 87.0, 'B': 45.0, 'C': 70.0, 'D': 71.0, 'E': 64.0, 'F': 47.0, 'H': 34.0, 'J': 67.0},
-    'H': {'A': 63.0, 'B': 64.0, 'C': 36.0, 'D': 37.0, 'E': 30.0, 'F': 70.0, 'G': 34.0, 'J': 33.0},
-    'J': {'A': 59.0, 'B': 48.0, 'C': 45.0, 'D': 33.0, 'E': 31.0, 'F': 71.0, 'G': 67.0, 'H': 33.0}
-}
-directed = False
+#graph = {
+#    'A': {'B': 50.0, 'C': 59.0, 'D': 26.0, 'E': 50.0, 'F': 40.0, 'G': 87.0, 'H': 63.0, 'J': 59.0},
+#    'B': {'A': 50.0, 'C': 28.0, 'D': 61.0, 'E': 79.0, 'F': 63.0, 'G': 45.0, 'H': 64.0, 'J': 48.0},
+#    'C': {'A': 59.0, 'B': 28.0, 'D': 33.0, 'E': 57.0, 'F': 35.0, 'G': 70.0, 'H': 36.0, 'J': 45.0},
+#    'D': {'A': 26.0, 'B': 61.0, 'C': 33.0, 'E': 24.0, 'F': 64.0, 'G': 71.0, 'H': 37.0, 'J': 33.0},
+#    'E': {'A': 50.0, 'B': 79.0, 'C': 57.0, 'D': 24.0, 'F': 40.0, 'G': 64.0, 'H': 30.0, 'J': 31.0},
+#    'F': {'A': 40.0, 'B': 63.0, 'C': 35.0, 'D': 64.0, 'E': 40.0, 'G': 47.0, 'H': 70.0, 'J': 71.0},
+#    'G': {'A': 87.0, 'B': 45.0, 'C': 70.0, 'D': 71.0, 'E': 64.0, 'F': 47.0, 'H': 34.0, 'J': 67.0},
+#    'H': {'A': 63.0, 'B': 64.0, 'C': 36.0, 'D': 37.0, 'E': 30.0, 'F': 70.0, 'G': 34.0, 'J': 33.0},
+#    'J': {'A': 59.0, 'B': 48.0, 'C': 45.0, 'D': 33.0, 'E': 31.0, 'F': 71.0, 'G': 67.0, 'H': 33.0}
+#}
+#directed = False
 
 #the second test data - fully undirected
 #graph = {
@@ -53,10 +53,10 @@ directed = False
 #n = 5
 
 #for key in letters[:n]:
-#    graph[key] = {}
-#    for vertex in letters[:n]:
-#        if vertex != key:
-#            graph[key][vertex] = 1.0
+    #graph[key] = {}
+    #for vertex in letters[:n]:
+        #if vertex != key:
+            #graph[key][vertex] = 1.0
 #directed = False
 
 #The fourth test data - checking an incomplete graph
@@ -68,10 +68,20 @@ directed = False
 #}
 #directed = True
 
+#graph = {
+#    'A': {'B': 1, 'C': 1},
+#    'B': {'A': 1, 'C': 1, 'D': 1},
+#    'C': {'A': 1, 'B': 1, 'D': 1},
+#    'D': {},
+#    'E': {'F': 1},
+#    'F': {'E': 1}
+#}
+#directed = True
+
 #-----------------------------------------------------
 #Measuring the runtime manually (for testing purposes)
-from time import perf_counter
-start = perf_counter()
+#from time import perf_counter
+#start = perf_counter()
 #-----------------------------------------------------
 
 from copy import deepcopy
@@ -154,20 +164,23 @@ def solve(graph, directed, principal):
                 incompatible = True
 
             # To determine if there are anymore incomplete tours
-            for tour in final_tours:
-                if len(tour[0]) < len(graph):
-                    #To prevent re-accessing the same tour that was incompatible
-                    if incompatible:
-                        incompatible = False
-                        incompatible_tour = deepcopy(tour)
-                        continue
-                    else:
-                        # Resetting all the values of the variables for the next run
-                        pathway, total_weight, graph_neigh = tour[0], tour[1], deepcopy(tour[2])
-                        visiting_vertex = pathway[-1]
-                        break
-                elif tour == final_tours[-1]:
-                    incomplete = False
+            if final_tours != []:
+                for tour in final_tours:
+                    if len(tour[0]) < len(graph):
+                        #To prevent re-accessing the same tour that was incompatible
+                        if incompatible:
+                            incompatible = False
+                            incompatible_tour = deepcopy(tour)
+                            continue
+                        else:
+                            # Resetting all the values of the variables for the next run
+                            pathway, total_weight, graph_neigh = tour[0], tour[1], deepcopy(tour[2])
+                            visiting_vertex = pathway[-1]
+                            break
+                    elif tour == final_tours[-1]:
+                        incomplete = False
+            else:
+                incomplete = False
 
             # If there is an incompatible tour...
             try:
@@ -199,14 +212,15 @@ def solve(graph, directed, principal):
                 final_tours.remove(incompatible_tour)
         except NameError:
             pass
+    
+        #Only one run for one vertex
+        #if principal_specified:
+            #break
 
-    #Only one run for one vertex
-    if principal_specified:
-        break
-
-#Removing the no-longer-needed state
-for tour in final_tours:
-   tour.pop()
+    if final_tours != []:
+        #Removing the no-longer-needed state
+        for tour in final_tours:
+           tour.pop()
 
 
         #Isolating the shortest tours
@@ -249,7 +263,32 @@ for tour in final_tours:
             final_tours_optimised[0].append(tour[0])
         final_tours = deepcopy(final_tours_optimised)
 
-    final_tours = deepcopy(final_tours_ordered)
+    return final_tours
 
 #Algorithm fully works!
+#pass
+
+# Data from the June 2022 Question 3
+graph = {
+    'A': {'B': 12.0, 'C': 24.0, 'D': 20.0, 'E': 23.0, 'F': 11.0},
+    'B': {'A': 12.0, 'C': 12.0, 'D': 8.0, 'E': 24.0, 'F': 21.0},
+    'C': {'A': 28.0, 'B': 2.0, 'D': 4.0, 'E': 12.0, 'F': 2.0},
+    'D': {'A': 24.0, 'B': 21.0, 'C': 4.0, 'E': 16.0, 'F': 13.0},
+    'E': {'A': 23.0, 'B': 29.0, 'C': 12.0, 'D': 16.0, 'F': 12.0},
+    'F': {'A': 11.0, 'B': 23.0, 'C': 17.0, 'D': 13.0, 'E': 12.0},
+}
+directed = True
+
+#letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+#graph = {}
+#n = 4
+
+#for key in letters[:n]:
+#    graph[key] = {}
+#    for vertex in letters[:n]:
+#        if vertex != key:
+#            graph[key][vertex] = 1.0
+#directed = False
+
+final_tours = solve(graph, directed, 'B')
 pass

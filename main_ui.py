@@ -4,9 +4,8 @@ from PyQt6.QtCore import QSize, Qt, QTimer, QRectF, QEventLoop
 from PyQt6.QtGui import QAction, QIcon, QDoubleValidator, QBrush, QPen, QColor, QTextOption
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow,
-    QDialog, QDialogButtonBox,
-    QLabel, QPushButton, QMessageBox,
-    QHBoxLayout, QVBoxLayout, QGraphicsItemGroup,
+    QDialog, QLabel, QPushButton, QMessageBox,
+    QHBoxLayout, QVBoxLayout,
     QToolBar, QToolButton, QGraphicsDropShadowEffect,
     QWidget, QLineEdit, QComboBox, QRadioButton, QButtonGroup,
     QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsItemGroup,
@@ -313,7 +312,6 @@ class AddArcDialog(QDialog):
         self.route_1.hide()
         self.route_2.hide()
 
-
         #--------------------------------------------------------------------
         #THE MAIN LAYOUT
 
@@ -324,7 +322,6 @@ class AddArcDialog(QDialog):
         self.main_layout.addWidget(self.arc_weight_input_warning)
         self.main_layout.addLayout(direction_option_layout)
         self.main_layout.addWidget(self.arc_presence_warning)
-
 
         #--------------------------------------------------------------------
         #THE CONFIRMATION BUTTONS
@@ -569,7 +566,6 @@ class MainWindow(QMainWindow):
         self.view = QGraphicsView(self.workspace)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-
         self.setCentralWidget(self.view)
 
         self.graph = {}
@@ -771,8 +767,6 @@ class MainWindow(QMainWindow):
 
         # the two states of selection
         self.dijkstra_state = 'origin'
-        self.dijkstra_origin = None
-        self.dijkstra_destination = None
 
         self.add_vertex_button.clicked.connect(self.add_a_vertex)
         self.add_arc_button.clicked.connect(self.add_an_arc)
@@ -829,8 +823,8 @@ class MainWindow(QMainWindow):
 
         #Renabling the buttons
         self.dijkstra_button.setEnabled(True)
-        self.nearest_neighbour_button.setEnabled(True)
         self.dijkstra_button.blockSignals(False)
+        self.nearest_neighbour_button.setEnabled(True)
         self.nearest_neighbour_button.blockSignals(False)
 
         self.algorithm_vertex_select = False
@@ -888,7 +882,8 @@ class MainWindow(QMainWindow):
             stop_1_x, stop_1_y, stop_2_x, stop_2_y = '', '', '', ''
 
             #Finding the positions of each vertex
-            for vertex in self.vertices:
+            for vertex in self.vertices.values():
+
                 #If the text is met...
                 if text_item_to_string(vertex[0].childItems()[1]) == stop_1:
                     stop_1_x = vertex[1][0]
@@ -960,7 +955,7 @@ class MainWindow(QMainWindow):
                 midpoint_y = stop_1_y
 
             #Displaying the arc weight
-            arc_weight_label = QLabel()
+            arc_weight_text = QGraphicsTextItem()
 
             #Setting a visual arrow - ↑↗→↘↓↙←↖
             if direction_option == 'One-way':
@@ -987,7 +982,7 @@ class MainWindow(QMainWindow):
                     else:
                         arrow = '↙'
 
-                arc_weight_label.setText(f'{str(arc_weight)} {arrow}')
+                arc_weight_text.setHtml(text_styling('arc', f'{str(arc_weight)} {arrow}', 'black'))
             else:
                 arc_weight_text.setHtml(text_styling('arc', str(arc_weight), 'black'))
             # Force repaint
@@ -999,7 +994,7 @@ class MainWindow(QMainWindow):
 
             arc = QGraphicsItemGroup()
             arc.addToGroup(arc_line)
-            arc.addToGroup(arc_weight_proxy)
+            arc.addToGroup(arc_weight_text)
             arc.setZValue(-100)
             self.workspace.addItem(arc)
 
@@ -1034,8 +1029,8 @@ class MainWindow(QMainWindow):
                 vertex[0].childItems()[1].setHtml(
                     text_styling('vertex', text_item_to_string(vertex[0].childItems()[1]), self.theme_properties[self.current_algorithm]['hex_color'])
                 )
-                update_style(vertex[1].widget())
-                vertex[1].graphicsEffect().set_algorithm_unselected()
+
+                vertex[0].childItems()[1].graphicsEffect().set_algorithm_unselected()
 
             #Updating the prompt_bar and exit_button
             self.prompt_bar.setProperty('type', 'promptBar')
@@ -1049,7 +1044,6 @@ class MainWindow(QMainWindow):
             self.exit_button.show()
             self.exit_button.clicked.connect(self.exit_process)
 
-            self.dijkstra_state = 'origin'
         else:
             message = QMessageBox()
             message.setWindowTitle('Algorithm Cannot Be Performed')
@@ -1088,7 +1082,7 @@ class MainWindow(QMainWindow):
                 vertex_shape.set_default()
 
                 #-------------------------------------------------------
-                #VERTEX_LABEL: CONSTRUCTION
+                #VERTEX_TEXT: CONSTRUCTION
 
                 vertex_text = QGraphicsTextItem()
                 vertex_text.document().setTextWidth(110)
@@ -1110,12 +1104,11 @@ class MainWindow(QMainWindow):
                 #Setting the glow/shadow of the vertex text#
                 vertex_name_effect = VertexIdentifierEffect()
                 vertex_name_effect.set_default()
-                vertex_label_proxy.setGraphicsEffect(vertex_name_effect)
+                vertex_text.setGraphicsEffect(vertex_name_effect)
 
                 vertex = QGraphicsItemGroup()
                 vertex.addToGroup(vertex_shape)
-                vertex.addToGroup(vertex_label_proxy)
-                update_style(vertex_label)
+                vertex.addToGroup(vertex_text)
                 self.workspace.addItem(vertex)
 
                 vertex.setFlags(
@@ -1145,9 +1138,10 @@ class MainWindow(QMainWindow):
                 vertex_text.graphicsEffect().set_algorithm_selected(
                     self.theme_properties[self.current_algorithm]['rgb_color'])
 
-                    #Stage 1: Selecting the origin & performing the algorithm
+                if self.current_algorithm == 'dijkstra':
+                    # Stage 1: Selecting the origin & performing the algorithm
                     if self.dijkstra_state == 'origin':
-                        self.dijkstra_origin = vertex[1].widget().text()
+                        self.dijkstra_origin = vertex_text_str
                         self.dijkstra_state = 'destination'
                         self.prompt_bar.setText('Select your <strong>destination</strong>')
                         self.dijkstra_results = dijkstra_algorithm.solve(self.graph, self.directed,
