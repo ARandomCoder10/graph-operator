@@ -1057,11 +1057,9 @@ class MainWindow(QMainWindow):
                 #-------------------------------------------------------
                 #VERTEX_LABEL: CONSTRUCTION
 
-                #Initial construction & styling
-                vertex_label = QLabel(vertex_name)
-                vertex_label.setWordWrap(True)
-                vertex_label.setMaximumWidth(300)
-                vertex_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                vertex_text = QGraphicsTextItem()
+                vertex_text.document().setTextWidth(110)
+                vertex_text.setHtml(text_styling('vertex', vertex_name, 'white'))
 
                 #Adjusting the text sizing based on length of text entered
                 vertex_label.setStyleSheet(vertex_name_styling('white', len(vertex_name)))
