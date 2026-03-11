@@ -76,7 +76,7 @@ QLabel {
     font-size: 25px;
 }
 
-QLabel[type = 'prompt_bar'] {
+QLabel[type = 'promptBar'], QPushButton[type = 'dropDown'] {
     border-style: solid;
     border-width: 3px;
     border-radius: 18px;
