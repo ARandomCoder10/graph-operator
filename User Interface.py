@@ -1056,10 +1056,13 @@ class MainWindow(QMainWindow):
                         self.dijkstra_destination = vertex[1].widget().text()
                         self.dijkstra_results = self.dijkstra_results[self.dijkstra_destination]
 
-                        if self.dijkstra_results[1] != float('inf'):
-                            #Removing unnecessary decimals
-                            if int(self.dijkstra_results[1]) == float(self.dijkstra_results[1]):
-                                self.dijkstra_results[1] = int(self.dijkstra_results[1])
+        #[ [[pathway], [pathway], [pathway]], total_weight]
+        if (self.current_algorithm == 'dijkstra' and self.algorithm_results[1] != float('inf')) or (
+                self.current_algorithm == 'nearest_neighbour' and self.algorithm_results != []):
+
+            # Removing unnecessary decimals
+            if int(self.algorithm_results[1]) == float(self.algorithm_results[1]):
+                self.algorithm_results[1] = int(self.algorithm_results[1])
 
                             self.prompt_bar.setText(
                                 f'<strong>Total</strong> from <strong>{self.dijkstra_origin}</strong> to <strong>{self.dijkstra_destination}</strong> is <strong>{self.dijkstra_results[1]}</strong>')
