@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (
     QHBoxLayout, QVBoxLayout, QGraphicsItemGroup,
     QToolBar, QToolButton, QGraphicsDropShadowEffect,
     QWidget, QLineEdit, QComboBox, QRadioButton, QButtonGroup,
-    QGraphicsScene, QGraphicsRectItem, QGraphicsItem, QGraphicsTextItem,
-    QGraphicsEllipseItem, QGraphicsView, QApplication, QGraphicsLineItem, QGraphicsProxyWidget
+    QGraphicsScene, QGraphicsView, QGraphicsItem, QGraphicsItemGroup,
+    QGraphicsEllipseItem, QGraphicsLineItem, QGraphicsTextItem
 )
 
 window_styling = '''
