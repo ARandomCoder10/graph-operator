@@ -272,6 +272,14 @@ class AddArcDialog(QDialog):
 
         self.direction_option.addButton(self.directed_choice)
         self.direction_option.addButton(self.undirected_choice)
+        self.undirected_choice.setChecked(True)  # Preset value
+
+        self.direction_option.buttonToggled.connect(self.show_directed_routes)
+        self.direction_option.buttonToggled.connect(self.arc_presence_check)
+
+        self.arc_presence_warning = QLabel(self)
+        self.arc_presence_warning.setStyleSheet('color: #FF6464')
+        self.arc_presence_warning.hide()
 
         direction_option_layout = QHBoxLayout()
         direction_option_layout.addWidget(self.directed_choice)
