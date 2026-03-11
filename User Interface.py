@@ -323,8 +323,7 @@ class AddArcDialog(QDialog):
         self.main_layout.addLayout(arc_weight_layout)
         self.main_layout.addWidget(self.arc_weight_input_warning)
         self.main_layout.addLayout(direction_option_layout)
-
-        self.direction_option.buttonClicked.connect(self.show_directed_routes)
+        self.main_layout.addWidget(self.arc_presence_warning)
 
 
         #--------------------------------------------------------------------
