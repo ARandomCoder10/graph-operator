@@ -417,6 +417,7 @@ class SelectRouteDialog(QDialog):
         self.route_select.setCurrentText(current_route)
         for i in range(no_of_routes):
             self.route_select.addItem(f'Route {i + 1}')
+        self.route_select.setCurrentIndex(current_route_index)
 
         main_layout = QHBoxLayout()
         main_layout.addWidget(label)
