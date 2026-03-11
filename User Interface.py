@@ -124,15 +124,20 @@ QLabel[type = 'arc_weight'] {
 }
 '''
 
-
-def vertex_name_styling(color, text_length):
-    style = '''
-        QLabel {
-            background-color: transparent;
-            font-weight: bold;
-            color: #######;
-            font-size: --px;
-        }
+def text_styling(object, text, text_color):
+    html = '''
+        <style>
+            span {
+                border: 4px solid white;
+                font-weight: bold;
+                text-align: center;
+                font-size: --px;
+                color: ######;
+                ]]]]];
+            }
+        </style>
+        
+        <span>&nbsp;*** </span>
     '''
 
     style = style.replace('#######', color)
