@@ -1040,6 +1040,9 @@ class MainWindow(QMainWindow):
             #To stop it triggering in the future
             self.add_vertex_active = False
 
+            #Making sure it is within the right bounds
+            #if (154 < event.pos.x() < 1406 and event.pos.y() > 154 or (event.pos.x() >= 1406 and event.pos.y() > 396):
+
             global_pos = event.globalPosition().toPoint()
             view_pos = self.view.mapFromGlobal(global_pos)
             scene_pos = self.view.mapToScene(view_pos)
