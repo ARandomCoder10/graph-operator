@@ -604,8 +604,8 @@ class MainWindow(QMainWindow):
         #Prompt bar (1.16 x 17.36)
         self.prompt_bar = QLabel(self)
         self.prompt_bar.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.prompt_bar.setFixedSize(828, 51)
-        self.prompt_bar.setProperty('type', 'prompt_bar')
+        self.prompt_bar.setFixedSize(1022, 51)
+        self.prompt_bar.setProperty('type', 'promptBar')
         update_style(self.prompt_bar)
         self.prompt_bar.hide()
 
