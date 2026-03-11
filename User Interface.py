@@ -774,9 +774,10 @@ class MainWindow(QMainWindow):
         self.dijkstra_origin = None
         self.dijkstra_destination = None
 
-        self.add_vertex_button.clicked.connect(self.adding_a_vertex)
-        self.add_arc_button.clicked.connect(self.adding_an_arc)
-        self.dijkstra_button.clicked.connect(self.dijkstra_initiation)
+        self.add_vertex_button.clicked.connect(self.add_a_vertex)
+        self.add_arc_button.clicked.connect(self.add_an_arc)
+        self.dijkstra_button.clicked.connect(lambda : self.algorithm_initiation('dijkstra'))
+        self.nearest_neighbour_button.clicked.connect(lambda : self.algorithm_initiation('nearest_neighbour'))
 
     def isolate_role(self, role):
         #Disabling the buttons
