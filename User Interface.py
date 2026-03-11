@@ -140,7 +140,17 @@ def text_styling(object, text, text_color):
         <span>&nbsp;*** </span>
     '''
 
-    style = style.replace('#######', color)
+    if object == 'vertex':
+
+        length = len(text)
+        if length >= 15:
+            html = html.replace('--', '16')
+        elif length >= 8:
+            html = html.replace('--', '19')
+        elif length >= 4:
+            html = html.replace('--', '22')
+        else:
+            html = html.replace('--', '25')
 
     #The length of the text
     if text_length >= 15:
