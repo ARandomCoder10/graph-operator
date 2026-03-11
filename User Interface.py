@@ -200,6 +200,7 @@ class AddArcDialog(QDialog):
     def __init__(self, vertices, arcs):
         super().__init__()
         self.setWindowTitle('Adding a path')
+        self.arcs = arcs
         vertices.sort()
 
         #-----------------------------------------------------------
