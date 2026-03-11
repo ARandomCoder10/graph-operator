@@ -179,7 +179,10 @@ def solve(graph, directed, principal):
         pathways = branches[0]
         print(pathways)
         sorted_pathways = [pathways[0]]
-        for pathway in pathways:
+
+        #For each pathway
+        for pathway in pathways[1:]:
+            #Checking each sorted pathway
             for i, sorted_pathway in enumerate(sorted_pathways):
                 if len(sorted_pathway) > len(pathway):
                     sorted_pathways.insert(i, pathway)
