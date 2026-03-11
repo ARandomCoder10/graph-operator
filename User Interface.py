@@ -836,8 +836,8 @@ class MainWindow(QMainWindow):
         self.algorithm_vertex_select = False
         self.algorithm_route_display = False
 
-    def adding_a_vertex(self):
-        self.isolate_role('add_vertex')
+    def add_a_vertex(self):
+        self.isolate_role(self.add_vertex_button)
         self.add_vertex_active = True
 
         #Setting the label
