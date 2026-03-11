@@ -220,13 +220,31 @@ for start_vertex in graph:
 for tour in final_tours:
    tour.pop()
 
-# Checking for & removing repeated tours that are backwards
-if directed:
-    for tour in final_tours:
-        #If there is an identical
-        if final_tours.count(tour) == 2:
-            #Remove the identicals to eventually retain one of it
-            final_tours.remove(tour)
+
+        #Isolating the shortest tours
+        tour_weights = []
+        final_tours_abstracted = []
+
+        for tour in final_tours:
+            if tour[1] not in tour_weights:
+                tour_weights.append(tour[1])
+        minimum_tour_weight = min(tour_weights)
+
+        for tour in final_tours:
+            if tour[1] == minimum_tour_weight:
+                final_tours_abstracted.append(tour)
+        final_tours = deepcopy(final_tours_abstracted)
+
+        # Removing any identical tours (caused by tours with no directed arcs)
+        if directed:
+            for tour in final_tours:
+                # If there is an identical
+                if final_tours.count(tour) == 2:
+                    # Iterate backwards to prevent dynamic index skipping
+                    for i, backward_tour in enumerate(final_tours[::-1]):
+                        if tour == backward_tour:
+                            final_tours.pop(len(final_tours) - i - 1)
+                            break
         else:
             tour.append(False)
         #This will label all the false ones...
