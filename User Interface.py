@@ -991,7 +991,7 @@ class MainWindow(QMainWindow):
 
         self.exit_process()
 
-    def dijkstra_initiation(self, event):
+    def algorithm_initiation(self, algorithm):
         if len(self.vertices) >= 2:
             self.isolate_role('dijkstra')
             self.dijkstra_active = True
