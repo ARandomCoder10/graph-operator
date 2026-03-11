@@ -1138,8 +1138,60 @@ class MainWindow(QMainWindow):
             if int(self.algorithm_results[1]) == float(self.algorithm_results[1]):
                 self.algorithm_results[1] = int(self.algorithm_results[1])
 
-                            self.prompt_bar.setText(
-                                f'<strong>Total</strong> from <strong>{self.dijkstra_origin}</strong> to <strong>{self.dijkstra_destination}</strong> is <strong>{self.dijkstra_results[1]}</strong>')
+            if self.current_algorithm == 'dijkstra':
+                self.prompt_bar.setText(
+                    f'<strong>Total</strong> from <strong>{self.dijkstra_origin}</strong> to <strong>{self.dijkstra_destination}</strong> is <strong>{self.algorithm_results[1]}</strong>'
+                )
+            else:
+                self.prompt_bar.setText(
+                    f'<strong>Total</strong> to and from <strong>{self.nearest_neighbour_start_and_return}</strong> is <strong>{self.algorithm_results[1]}</strong>'
+                )
+
+            self.route_index = 0
+            self.multiple_routes = len(self.algorithm_results[0]) > 1
+
+            # Styling the replay button
+            self.replay_route_button.setProperty('role', 'controlProcess')
+            self.replay_route_button.setProperty('state', self.theme_properties[self.current_algorithm]['style_id'])
+            update_style(self.replay_route_button)
+
+            if self.multiple_routes:
+                message = QMessageBox()
+                message.setWindowTitle('Multiple Routes Found')
+                message.setIcon(QMessageBox.Icon.Information)
+                if self.current_algorithm == 'dijkstra':
+                    multiple_routes_text = f'Between {self.dijkstra_origin} & {self.dijkstra_destination}, \nthere are multiple paths with \nthe same minimal distance.'
+                else:
+                    multiple_routes_text = f'There are multiple paths\nwith the same minimal distance\nstarting & returning to {self.nearest_neighbour_start_and_return}.'
+                message.setText(multiple_routes_text)
+                message.exec()
+
+                #Styling the label & drop
+                self.route_label.setProperty('state', self.theme_properties[self.current_algorithm]['style_id'])
+                update_style(self.route_label)
+
+                self.route_drop_down.setProperty('state', self.theme_properties[self.current_algorithm]['style_id'])
+                if self.current_algorithm == 'dijkstra':
+                    self.route_drop_down.setIcon(QIcon(r'icons\drop down arrow (dijkstra).png'))
+                else:
+                    self.route_drop_down.setIcon(QIcon(r'icons\drop down arrow (nearest neighbour).png'))
+                self.route_drop_down.setIconSize(QSize(24, 24))
+                update_style(self.route_drop_down)
+
+                #Updating the layout
+                self.prompt_bar.setFixedWidth(695)
+                self.header_layout.insertWidget(3, self.route_label)
+                self.header_layout.insertWidget(4, self.route_drop_down)
+                self.header_layout.insertWidget(5, self.replay_route_button)
+                self.route_label.show()
+                self.route_drop_down.show()
+
+            else:
+                self.prompt_bar.setFixedWidth(962)
+                self.header_layout.insertWidget(3, self.replay_route_button)
+
+            self.replay_route_button.show()
+            self.display_route() #Showing the default route
 
                         else:
                             #If there is no path connecting them...
