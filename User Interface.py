@@ -197,7 +197,7 @@ class AddVertexDialog(QDialog):
         return self.vertex_name_input.text()
 
 class AddArcDialog(QDialog):
-    def __init__(self, vertices):
+    def __init__(self, vertices, arcs):
         super().__init__()
         self.setWindowTitle('Adding a path')
         vertices.sort()
