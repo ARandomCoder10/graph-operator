@@ -155,7 +155,10 @@ def text_styling(object, text, text_color):
         html = html.replace(']]]]]', '')
 
     else:
-        style = style.replace('--', '25')
+
+        html = html.replace('--', '20')
+        html = html.replace(']]]]]',
+                            'background-color: white; padding: 3px')
 
     return style
 
