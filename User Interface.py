@@ -854,8 +854,8 @@ class MainWindow(QMainWindow):
         self.exit_button.show()
         self.exit_button.clicked.connect(self.exit_process)
 
-    def adding_an_arc(self):
-        self.isolate_role('add_arc')
+    def add_an_arc(self):
+        self.isolate_role(self.add_arc_button)
 
         #Displaying the add_arc dialog
         add_arc_dialog = AddArcDialog(list(self.graph.keys()))
