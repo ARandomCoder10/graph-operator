@@ -385,6 +385,44 @@ class AddArcDialog(QDialog):
             self.route_2.hide()
             QTimer.singleShot(0, self.adjustSize)
 
+    def arc_presence_check(self):
+        stop_1_to_2_present = self.stop_2.currentText() in self.arcs[self.stop_1.currentText()]
+        stop_2_to_1_present = self.stop_1.currentText() in self.arcs[self.stop_2.currentText()]
+
+        if self.direction_option.checkedButton().text() == 'Two-way':
+            path_already_exists = True
+
+            #If the undirected arc is already present
+            if stop_1_to_2_present and stop_2_to_1_present:
+                self.arc_presence_warning.setText('This path already exists.')
+
+            #If one directed arc present between the stops
+            elif stop_1_to_2_present or stop_2_to_1_present:
+                self.arc_presence_warning.setText('This path already heads in one direction. Maybe you\nmean for it to head in the opposite direction?')
+
+            else:
+                path_already_exists = False
+
+        # Depending on the route, if such route is already present
+        elif (self.route_1.isChecked() and stop_1_to_2_present) or (
+            self.route_2.isChecked() and stop_2_to_1_present):
+            path_already_exists = True
+            self.arc_presence_warning.setText('This path heading this direction already exists.')
+
+        else:
+            path_already_exists = False
+
+
+        #Disabling other inputs
+        self.arc_weight_input.setDisabled(path_already_exists)
+        self.ok_button.setDisabled(path_already_exists)
+
+        if path_already_exists:
+            self.arc_presence_warning.show()
+        else:
+            self.arc_presence_warning.hide()
+            QTimer.singleShot(0, self.adjustSize)
+
     def confirm_validation(self):
         if self.arc_weight_input.text() == '':
             self.arc_weight_input_warning.setText('Please enter a number.')
