@@ -1,9 +1,7 @@
 import dijkstra_algorithm, nearest_neighbour_algorithm
 
-import dijkstra_algorithm
-
-from PyQt6.QtCore import QSize, Qt, QTimer, QRectF, QPointF
-from PyQt6.QtGui import QAction, QIcon, QDoubleValidator, QBrush, QPen, QPolygonF, QPixmap, QPainter, QColor
+from PyQt6.QtCore import QSize, Qt, QTimer, QRectF, QEventLoop
+from PyQt6.QtGui import QAction, QIcon, QDoubleValidator, QBrush, QPen, QColor, QTextOption
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow,
     QDialog, QDialogButtonBox,
