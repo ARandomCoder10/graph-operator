@@ -1107,12 +1107,9 @@ class MainWindow(QMainWindow):
             if self.algorithm_vertex_select:
                 vertex_shape.set_algorithm_selected(self.theme_properties[self.current_algorithm]['hex_color'])
 
-                    #Styling the selected verticees
-                    vertex[0].set_algorithm_selected('#CC00FF')
-                    vertex[1].widget().setStyleSheet(
-                        vertex_name_styling('white', len(vertex[1].widget().text())))
-                    update_style(vertex[1].widget())
-                    vertex[1].graphicsEffect().set_algorithm_selected(QColor(204, 0, 255, 255))
+                vertex_text.setHtml(text_styling('vertex', vertex_text_str, 'white'))
+                vertex_text.graphicsEffect().set_algorithm_selected(
+                    self.theme_properties[self.current_algorithm]['rgb_color'])
 
                     #Stage 1: Selecting the origin & performing the algorithm
                     if self.dijkstra_state == 'origin':
