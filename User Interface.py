@@ -516,6 +516,9 @@ class MainWindow(QMainWindow):
         self.workspace = QGraphicsScene(self)
         self.workspace.setSceneRect(QRectF(0, 0, 1539, 841))
         self.workspace.setBackgroundBrush(Qt.GlobalColor.white)
+
+        self.workspace.selectionChanged.connect(self.scene_item_selected)
+
         self.view = QGraphicsView(self.workspace)
         self.view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
