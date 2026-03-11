@@ -408,7 +408,7 @@ class AddArcDialog(QDialog):
             return None
 
 class SelectRouteDialog(QDialog):
-    def __init__(self, no_of_routes, current_route):
+    def __init__(self, no_of_routes, current_route_index):
         super().__init__()
         self.setWindowTitle('Select the route')
         label = QLabel('Showing: ')
