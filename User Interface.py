@@ -88,7 +88,7 @@ QLabel[type = 'promptBar'][state = 'constructGraph'] {
     color: #0033CC;
 }
 
-QLabel[type = 'prompt_bar'][role = 'dijkstra'] {
+QLabel[type = 'promptBar'][state = 'dijkstra'], QPushButton[type = 'dropDown'][state = 'dijkstra'] {
     border-color: #CC00FF;
     color: #CC00FF;
 }
