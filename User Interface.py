@@ -37,7 +37,7 @@ QPushButton[role = 'constructGraph'] {
     color: white;
 }
 
-QPushButton:disabled[state = 'greyed'] {
+QPushButton[role = 'constructGraph']:disabled {
     background-color: #666666;
 }
 
