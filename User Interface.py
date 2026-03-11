@@ -160,7 +160,10 @@ def text_styling(object, text, text_color):
         html = html.replace(']]]]]',
                             'background-color: white; padding: 3px')
 
-    return style
+    html = html.replace('######', text_color)
+    html = html.replace('***', text)
+
+    return html
 
 class AddVertexDialog(QDialog):
     def __init__(self, vertices):
