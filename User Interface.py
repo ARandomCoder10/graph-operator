@@ -93,7 +93,7 @@ QLabel[type = 'promptBar'][state = 'dijkstra'], QPushButton[type = 'dropDown'][s
     color: #CC00FF;
 }
 
-QLabel[type = 'prompt_bar'][role = 'nearest_neighbour'] {
+QLabel[type = 'promptBar'][state = 'nearestNeighbour'], QPushButton[type = 'dropDown'][state = 'nearestNeighbour'] {
     border-color: #FF6600;
     color: #FF6600;
 }
