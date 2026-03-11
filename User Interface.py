@@ -646,6 +646,8 @@ class MainWindow(QMainWindow):
         self.add_arc_button = QPushButton(self)
         self.add_arc_button.setText('Add a path')
         self.add_arc_button.setFixedSize(160, 51)
+        self.add_arc_button.setProperty('role', 'constructGraph')
+        update_style(self.add_arc_button)
 
         #Prompt bar (1.16 x 17.36)
         self.prompt_bar = QLabel(self)
