@@ -1015,9 +1015,8 @@ class MainWindow(QMainWindow):
                 vertex[1].graphicsEffect().set_algorithm_unselected()
 
             #Updating the prompt_bar and exit_button
-            self.prompt_bar.setText('Select your <strong>origin</strong>')
-            self.prompt_bar.setProperty('type', 'prompt_bar')
-            self.prompt_bar.setProperty('role', 'dijkstra')
+            self.prompt_bar.setProperty('type', 'promptBar')
+            self.prompt_bar.setProperty('state', self.theme_properties[self.current_algorithm]['style_id'])
             update_style(self.prompt_bar)
             self.prompt_bar.show()
 
