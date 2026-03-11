@@ -1203,13 +1203,45 @@ class MainWindow(QMainWindow):
             self.replay_route_button.show()
             self.display_route() #Showing the default route
 
-                        else:
-                            #If there is no path connecting them...
-                            message = QMessageBox()
-                            message.setWindowTitle('No Path Found')
-                            message.setIcon(QMessageBox.Icon.Information)
-                            message.setText('There is no path \nconnecting the two stops.')
-                            message.exec()
+        else:
+            # If there is no path connecting them...
+            message = QMessageBox()
+            message.setWindowTitle('No Path Found')
+            message.setIcon(QMessageBox.Icon.Information)
+            message.setText('There is no path \nconnecting the two stops.')
+            message.exec()
+            self.exit_process()
+
+    def select_route(self):
+        select_route_dialog = SelectRouteDialog(len(self.algorithm_results[0]), self.route_index)
+        
+        if select_route_dialog.exec() == QDialog.DialogCode.Accepted:
+            self.route_index = select_route_dialog.get_route()
+            self.display_route()
+
+    def display_route(self):
+        self.replay_route_button.setDisabled(True)
+
+        # Updating the route_counter
+        if self.multiple_routes:
+            self.route_label.setText(
+                f'<strong>Route {self.route_index + 1}</strong> of <strong>{len(self.algorithm_results[0])}</strong>')
+
+        # Removing all scene items from sight
+        for item in list(self.workspace.items()):
+            if isinstance(item, QGraphicsItemGroup):
+                item.setVisible(False)
+
+        # Adding the origin
+        if self.current_algorithm == 'dijkstra':
+            self.vertices[self.dijkstra_origin][0].setVisible(True)
+        else:
+            self.vertices[self.nearest_neighbour_start_and_return][0].setVisible(True)
+
+        # Through each stop in the path
+        for i, current_stop in enumerate(self.algorithm_results[0][self.route_index][1:]):
+            wait()
+            previous_stop = self.algorithm_results[0][self.route_index][i]
 
                         self.dijkstra_active = False
                     break
