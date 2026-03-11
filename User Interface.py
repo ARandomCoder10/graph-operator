@@ -993,13 +993,8 @@ class MainWindow(QMainWindow):
             # Force repaint
             arc_weight_text.update()
 
-            arc_weight_label.adjustSize()
-            arc_weight_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-            arc_weight_proxy = QGraphicsProxyWidget()
-            arc_weight_proxy.setWidget(arc_weight_label)
-            arc_weight_proxy.setPos(midpoint_x - arc_weight_proxy.rect().width() // 2,
-                                    midpoint_y - arc_weight_proxy.rect().height() // 2
+            arc_weight_text.setPos(midpoint_x - arc_weight_text.boundingRect().width() // 2,
+                                    midpoint_y - arc_weight_text.boundingRect().height() // 2
                                     ) #Position in the centre of vertex
 
             arc = QGraphicsItemGroup()
