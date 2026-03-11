@@ -96,32 +96,6 @@ QLabel[type = 'promptBar'][state = 'nearestNeighbour'], QPushButton[type = 'drop
     border-color: #FF6600;
     color: #FF6600;
 }
-
-QLabel[type = 'vertex_name'][state = 'dijkstra'] {
-    color: #CC00FF;
-}
-
-QLabel[type = 'vertex_name'][state = 'nearest_neighbour'] {
-    color: #FF6600;
-}
-
-QPushButton[type = 'exit'][role = 'graph_construct'] {
-    background-color: #0033CC;
-}
-
-QPushButton[type = 'exit'][role = 'dijkstra'] {
-    background-color: #CC00FF;
-}
-
-QPushButton[type = 'exit'][role = 'nearest_neighbour'] {
-    background-color: #FF6600;
-}
-
-
-QLabel[type = 'arc_weight'] {
-    background-color: white;
-    color: black;
-}
 '''
 
 def text_styling(object, text, text_color):
