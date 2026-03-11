@@ -1061,10 +1061,11 @@ class MainWindow(QMainWindow):
                 vertex_text.document().setTextWidth(110)
                 vertex_text.setHtml(text_styling('vertex', vertex_name, 'white'))
 
-                #Adjusting the text sizing based on length of text entered
-                vertex_label.setStyleSheet(vertex_name_styling('white', len(vertex_name)))
-                update_style(vertex_label)
-                vertex_label.adjustSize()
+                opt = vertex_text.document().defaultTextOption()
+                opt.setWrapMode(QTextOption.WrapMode.WordWrap) #Wrapping after every word
+                opt.setAlignment(Qt.AlignmentFlag.AlignCenter) #Keeping the alignment after wrapping
+                vertex_text.document().setDefaultTextOption(opt)
+                vertex_text.update()
 
                 #Setting the visible proxy
                 vertex_label_proxy = QGraphicsProxyWidget()
