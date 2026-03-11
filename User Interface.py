@@ -1123,7 +1123,8 @@ class MainWindow(QMainWindow):
                 )
 
                 self.graph[vertex_name] = {}
-                self.vertices.append([vertex_shape, vertex_label_proxy, [vertex_pos_x, vertex_pos_y]])
+                self.vertices[vertex_name] = [vertex, [vertex_pos_x, vertex_pos_y]]
+                self.arcs[vertex_name] = {}
 
             #...else if Cancel clicked...
             else:
