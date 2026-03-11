@@ -29,7 +29,7 @@ QToolButton {
     font-size: 22px;
 }
 
-QPushButton, QPushButton:disabled[state = 'highlighted'] {
+QPushButton[role = 'constructGraph'] {
     background-color: #0033CC;
     border-radius: 18px;
     font-weight: bold;
