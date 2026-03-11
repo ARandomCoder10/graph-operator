@@ -1243,8 +1243,37 @@ class MainWindow(QMainWindow):
             wait()
             previous_stop = self.algorithm_results[0][self.route_index][i]
 
-                        self.dijkstra_active = False
-                    break
+            if not (
+                    self.current_algorithm == 'nearest_neighbour' and (
+                    i == len(self.algorithm_results[0][self.route_index]) - 2)
+            ):
+                #If at the end, no need to style the final vertex because it is already the beginning one
+
+                # Styling: the vertices
+                self.vertices[current_stop][0].childItems()[0].set_algorithm_selected(
+                    self.theme_properties[self.current_algorithm]['hex_color'])
+
+                self.vertices[current_stop][0].childItems()[1].setHtml(
+                    text_styling('vertex', current_stop, 'white'))
+
+                self.vertices[current_stop][0].childItems()[1].graphicsEffect().set_algorithm_selected(
+                    self.theme_properties[self.current_algorithm]['rgb_color'])
+
+                self.vertices[current_stop][0].setVisible(True)
+
+            # Styling: the arc weight labels
+            self.arcs[previous_stop][current_stop].childItems()[1].setHtml(
+                text_styling(
+                    'arc',
+                    text_item_to_string(self.arcs[previous_stop][current_stop].childItems()[1]),
+                    self.theme_properties[self.current_algorithm]['hex_color']))
+
+            # Displaying everything
+            self.arcs[previous_stop][current_stop].setVisible(True)
+
+        #Finishing and showing the replay
+        self.replay_route_button.setEnabled(True)
+
 
 app = QApplication([])
 window = MainWindow()
