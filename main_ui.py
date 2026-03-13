@@ -268,16 +268,12 @@ class AddArcDialog(QDialog):
         self.directed_choice = QRadioButton('One-way')
         self.undirected_choice = QRadioButton('Two-way')
 
-        self.direction_option.addButton(self.directed_choice)
-        self.direction_option.addButton(self.undirected_choice)
         self.undirected_choice.setChecked(True)  # Preset value
 
-        self.direction_option.buttonToggled.connect(self.show_directed_routes)
-        self.direction_option.buttonToggled.connect(self.arc_presence_check)
+        self.direction_option.addButton(self.directed_choice)
+        self.direction_option.addButton(self.undirected_choice)
 
-        self.arc_presence_warning = QLabel(self)
-        self.arc_presence_warning.setStyleSheet('color: #FF6464')
-        self.arc_presence_warning.hide()
+        self.direction_option.buttonClicked.connect(self.show_directed_routes)
 
         direction_option_layout = QHBoxLayout()
         direction_option_layout.addWidget(self.directed_choice)
@@ -300,8 +296,6 @@ class AddArcDialog(QDialog):
         directed_route_layout.addWidget(self.route_2)
         directed_route_layout.setContentsMargins(20, 0, 0, 0) #A small indent
 
-        self.directed_routes.buttonToggled.connect(self.arc_presence_check)
-
         self.direction_route_container = QWidget(self)
         self.direction_route_container.setLayout(directed_route_layout)
 
@@ -321,7 +315,6 @@ class AddArcDialog(QDialog):
         self.main_layout.addLayout(arc_weight_layout)
         self.main_layout.addWidget(self.arc_weight_input_warning)
         self.main_layout.addLayout(direction_option_layout)
-        self.main_layout.addWidget(self.arc_presence_warning)
 
         #--------------------------------------------------------------------
         #THE CONFIRMATION BUTTONS
@@ -336,6 +329,18 @@ class AddArcDialog(QDialog):
         self.ok_button.clicked.connect(self.confirm_validation)
         self.cancel_button.clicked.connect(self.reject)
 
+        #------------------------------------------------------------------
+        #THE ARC PRESENCE CHECK AND LABEL
+
+        self.arc_presence_warning = QLabel(self)
+        self.arc_presence_warning.setStyleSheet('color: #FF6464')
+        self.arc_presence_warning.show()
+        self.main_layout.addWidget(self.arc_presence_warning)
+
+        self.direction_option.buttonToggled.connect(self.arc_presence_check)
+        self.directed_routes.buttonToggled.connect(self.arc_presence_check)
+
+        self.arc_presence_check()
 
         #-------------------------------------------------------------------
         #THE FULL LAYOUT
@@ -346,8 +351,6 @@ class AddArcDialog(QDialog):
         self.setLayout(self.dialog_layout)
 
         self.setWindowFlag(Qt.WindowType.WindowCloseButtonHint, False)
-
-        self.arc_presence_check()
 
     #Preventing a loop
     def loop_check(self):
@@ -385,40 +388,42 @@ class AddArcDialog(QDialog):
     def arc_presence_check(self):
         stop_1_to_2_present = self.stop_2.currentText() in self.arcs[self.stop_1.currentText()]
         stop_2_to_1_present = self.stop_1.currentText() in self.arcs[self.stop_2.currentText()]
+        path_already_exists = False
 
-        if self.direction_option.checkedButton().text() == 'Two-way':
+        if self.direction_option.checkedButton().text() == 'One-way':
+            self.other_directed_path = False
+
+            # Depending on the route, if such route is already present
+            if (self.route_1.isChecked() and stop_1_to_2_present) or (
+                    self.route_2.isChecked() and stop_2_to_1_present):
+                path_already_exists = True
+                self.arc_presence_warning.setText(
+                    'This path heading this direction already exists.')
+
+            # If the other direction of the route is present
+            elif (self.route_1.isChecked() and stop_2_to_1_present) or (
+                    self.route_2.isChecked() and stop_1_to_2_present):
+                self.other_directed_path = True
+
+        #If the undirected arc is already present or there are two directed arcs between the stops
+        elif stop_1_to_2_present and stop_2_to_1_present:
             path_already_exists = True
+            self.arc_presence_warning.setText(
+                'There already is a path/are paths between these stops that go(es) both directions.')
 
-            #If the undirected arc is already present
-            if stop_1_to_2_present and stop_2_to_1_present:
-                self.arc_presence_warning.setText('This path already exists.')
-
-            #If one directed arc present between the stops
-            elif stop_1_to_2_present or stop_2_to_1_present:
-                self.arc_presence_warning.setText('This path already heads in one direction. Maybe you\nmean for it to head in the opposite direction?')
-
-            else:
-                path_already_exists = False
-
-        # Depending on the route, if such route is already present
-        elif (self.route_1.isChecked() and stop_1_to_2_present) or (
-            self.route_2.isChecked() and stop_2_to_1_present):
+        #If one directed arc present between the stops
+        elif stop_1_to_2_present or stop_2_to_1_present:
             path_already_exists = True
-            self.arc_presence_warning.setText('This path heading this direction already exists.')
+            self.arc_presence_warning.setText(
+                'There already is a path between these stops.')
 
-        else:
-            path_already_exists = False
-
-
-        #Disabling other inputs
-        self.arc_weight_input.setDisabled(path_already_exists)
         self.ok_button.setDisabled(path_already_exists)
 
         if path_already_exists:
             self.arc_presence_warning.show()
         else:
             self.arc_presence_warning.hide()
-            QTimer.singleShot(0, self.adjustSize)
+        QTimer.singleShot(0, self.adjustSize)
 
     def confirm_validation(self):
         if self.arc_weight_input.text() == '':
@@ -444,9 +449,9 @@ class AddArcDialog(QDialog):
         return self.direction_option.checkedButton().text()
     def get_route(self):
         if self.direction_option.checkedButton().text() == 'One-way':
-            return self.directed_routes.checkedButton().text()
+            return self.directed_routes.checkedButton().text(), self.other_directed_path
         else:
-            return None
+            return None, None
 
 class SelectRouteDialog(QDialog):
     def __init__(self, no_of_routes, current_route_index):
@@ -863,7 +868,7 @@ class MainWindow(QMainWindow):
             stop_1 = add_arc_dialog.get_stop_1()
             stop_2 = add_arc_dialog.get_stop_2()
             direction_option = add_arc_dialog.get_direction()
-            directed_route = add_arc_dialog.get_route()
+            directed_route, other_direction_present = add_arc_dialog.get_route()
             #Removing unnecessary decimal points from floats
             arc_weight = add_arc_dialog.get_arc_weight()
             arc_weight = float(arc_weight) if '.' in arc_weight else int(arc_weight)
@@ -898,41 +903,58 @@ class MainWindow(QMainWindow):
                 if '' not in (stop_1_x, stop_1_y, stop_2_x, stop_2_y):
                     break
 
+            #Adding multidirectional arcs between two vertices
+            if direction_option == 'One-way' and other_direction_present:
 
-            if direction_option == 'One-way':
-                #If                   this arc and its direction isn't present...         but there is an arc going the opposite way
-                if (directed_route == f'{stop_1} → {stop_2}' and stop_2 not in self.arcs[stop_1] and stop_1 in self.arcs[stop_2]) or (
-                    directed_route == f'{stop_2} → {stop_1}' and stop_1 not in self.arcs[stop_2] and stop_2 in self.arcs[stop_1]):
+                #Retrieving the arc going the other way
+                if directed_route == f'{stop_1} → {stop_2}':
+                    arc = self.arcs[stop_2][stop_1].childItems()[0]
+                    arc_weight_text = self.arcs[stop_2][stop_1].childItems()[1]
 
-                    #Retrieving the arc going the other way
-                    if directed_route == f'{stop_1} → {stop_2}':
-                        arc = self.arcs[stop_2][stop_1].childItems()[0]
-                        arc_weight_text = self.arcs[stop_2][stop_1].childItems()[1]
+                elif directed_route == f'{stop_2} → {stop_1}':
+                    arc = self.arcs[stop_1][stop_2].childItems()[0]
+                    arc_weight_text = self.arcs[stop_1][stop_2].childItems()[1]
 
-                    elif directed_route == f'{stop_2} → {stop_1}':
-                        arc = self.arcs[stop_1][stop_2].childItems()[0]
-                        arc_weight_text = self.arcs[stop_1][stop_2].childItems()[1]
+                arc_line = arc.line()
 
-                    arc_line = arc.line()
+                #Getting the bounding coordinates
+                start_point_x = arc_line.p1().x()
+                start_point_y = arc_line.p1().y()
+                end_point_x = arc_line.p2().x()
+                end_point_y = arc_line.p2().y()
 
-                    #Getting the bounding coordinates
-                    start_point_x = arc_line.p1().x()
-                    start_point_y = arc_line.p1().y()
-                    end_point_x = arc_line.p2().x()
-                    end_point_y = arc_line.p2().y()
+                arc_weight_text_str = text_item_to_string(arc_weight_text)
 
-                    #Altering the position & redrawing the arc
-                    arc.setLine(start_point_x, start_point_y - 25,
-                                end_point_x, end_point_y - 25)
-                    arc.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
-                    arc.update()
+                #↑↗→↘↓↙←↖
+                if arc_weight_text_str[-1] == '↑' or arc_weight_text_str[-1] == '↓':
+                    shift_x = -20
+                    shift_y = 0
+                    #Moving it up to prevent horizontal overlap with other arc_weight
+                    arc_weight_text.moveBy(-20, -20)
+                else:
+                    if arc_weight_text_str[-1] == '↘' or arc_weight_text_str[-1] == '↖':
+                        shift_x = 20
+                        shift_y = -20
+                    elif arc_weight_text_str[-1] == '↗' or arc_weight_text_str[-1] == '↙':
+                        shift_x = -20
+                        shift_y = -20
+                    elif arc_weight_text_str[-1] == '←' or arc_weight_text_str[-1] == '→':
+                        shift_x = 0
+                        shift_y = -20
+                    # Altering the position of the arc_weight_text
+                    arc_weight_text.moveBy(shift_x, shift_y)
 
-                    #Altering the position of the arc_weight_text
-                    arc_weight_text.moveBy(0, -25)
+                #Altering the position & redrawing the arc
+                arc.setLine(start_point_x + shift_x, start_point_y + shift_y,
+                            end_point_x + shift_x, end_point_y + shift_y)
+                arc.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
+                arc.update()
 
-                    #Setting the position of the new arc
-                    stop_1_y += 25
-                    stop_2_y += 25
+                #Setting the position of the new arc
+                stop_1_x -= shift_x
+                stop_2_x -= shift_x
+                stop_1_y -= shift_y
+                stop_2_y -= shift_y
 
             #Drawing it to the vertices' centres
             arc_line = QGraphicsLineItem(
@@ -991,9 +1013,18 @@ class MainWindow(QMainWindow):
             # Force repaint
             arc_weight_text.update()
 
+            try:
+                #If the other directed arc is ↑ or ↓
+                if shift_y == 0:
+                    text_shift = 20
+                else:
+                    text_shift = 0
+            except NameError:
+                text_shift = 0
+
             arc_weight_text.setPos(midpoint_x - arc_weight_text.boundingRect().width() // 2,
-                                    midpoint_y - arc_weight_text.boundingRect().height() // 2
-                                    ) #Position in the centre of vertex
+                                   midpoint_y - arc_weight_text.boundingRect().height() // 2 + text_shift
+                                   )  # Position in the centre of vertex
 
             arc = QGraphicsItemGroup()
             arc.addToGroup(arc_line)
@@ -1046,6 +1077,11 @@ class MainWindow(QMainWindow):
             update_style(self.exit_button)
             self.exit_button.show()
             self.exit_button.clicked.connect(self.exit_process)
+
+            # Deselecting any previously selected vertices
+            for item in self.workspace.selectedItems():
+                if isinstance(item, QGraphicsItemGroup):
+                    item.setSelected(False)
 
         else:
             message = QMessageBox()
@@ -1151,25 +1187,22 @@ class MainWindow(QMainWindow):
                                                                          self.dijkstra_origin)
 
                     # Stage 2: Selecting the destination & isolating the results
-                    elif self.dijkstra_origin != vertex_text_str:
+                    else:
                         self.dijkstra_destination = vertex_text_str
                         self.algorithm_results = self.dijkstra_results[self.dijkstra_destination]
 
-                        self.algorithm_mouseclick_active = False
-                        self.algorithm_process_active = True
-                        QTimer.singleShot(0, self.continue_algorithm) #Waiting for the event to finish
+                        self.algorithm_vertex_select = False
+                        self.algorithm_route_display = True
+                        QTimer.singleShot(0, self.continue_algorithm)  # Finishing the event signal
 
                 elif self.current_algorithm == 'nearest_neighbour':
                     self.nearest_neighbour_start_and_return = vertex_text_str
                     self.algorithm_results = nearest_neighbour_algorithm.solve(self.graph, self.directed, self.nearest_neighbour_start_and_return)
                     self.algorithm_vertex_select = False
                     self.algorithm_route_display = True
-                    QTimer.singleShot(0, self.continue_algorithm)
+                    QTimer.singleShot(0, self.continue_algorithm)  # Finishing the event signal
 
     def continue_algorithm(self):
-        for item in self.workspace.selectedItems():
-            if isinstance(item, QGraphicsItemGroup):
-                item.clearFocus()
 
         #[ [[pathway], [pathway], [pathway]], total_weight]
         if (self.current_algorithm == 'dijkstra' and self.algorithm_results[1] != float('inf')) or (
@@ -1237,9 +1270,12 @@ class MainWindow(QMainWindow):
         else:
             # If there is no path connecting them...
             message = QMessageBox()
-            message.setWindowTitle('No Path Found')
+            message.setWindowTitle('No Route Found')
             message.setIcon(QMessageBox.Icon.Information)
-            message.setText('There is no path \nconnecting the two stops.')
+            if self.current_algorithm == 'dijkstra':
+                message.setText('There is no route \nconnecting the two stops.')
+            else:
+                message.setText('There is no route to visit\nall stops starting & returning to\nthis vertex.')
             message.exec()
             self.exit_process()
 
