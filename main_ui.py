@@ -501,12 +501,6 @@ def wait():
     QTimer.singleShot(1250, wait_time.exit)
     wait_time.exec()
 
-#class Workspace(QGraphicsScene):
-#    def __init__(self):
-#        super().__init__()
-#        self.setSceneRect(QRectF(0, 0, 1539, 841))
-#        self.setBackgroundBrush(Qt.GlobalColor.white)
-
 class VertexShape(QGraphicsEllipseItem):
     def __init__(self):
         super().__init__()
@@ -611,6 +605,7 @@ class MainWindow(QMainWindow):
         self.save_action.setToolTip('Save this graph to a file')
         self.wipe_action = QAction('Wipe')
         self.wipe_action.setToolTip('Delete the graph entirely')
+        self.wipe_action.triggered.connect(self.wipe_graph)
 
         #Adding spacing for each button
         #From the left
@@ -698,7 +693,7 @@ class MainWindow(QMainWindow):
         self.dijkstra_button.setFixedSize(91, 91)
         self.dijkstra_button.setIcon(QIcon(r'icons\dijkstra.png'))
         self.dijkstra_button.setIconSize(QSize(91, 91))
-        self.dijkstra_button.setToolTip('Find the shortest path from one stop to another')
+        self.dijkstra_button.setToolTip("Find the shortest path from one stop to another\n(uses Dijkstra's algorithm)")
         self.dijkstra_button.setProperty('role', 'beginAlgorithm')
         update_style(self.dijkstra_button)
 
@@ -707,7 +702,7 @@ class MainWindow(QMainWindow):
         self.nearest_neighbour_button.setFixedSize(91, 91)
         self.nearest_neighbour_button.setIcon(QIcon(r'icons\nearest neighbour.png'))
         self.nearest_neighbour_button.setIconSize(QSize(91, 91))
-        self.nearest_neighbour_button.setToolTip('Find the shortest path to visit all stops and return')
+        self.nearest_neighbour_button.setToolTip('Find the shortest path to visit all stops exactly once and return\n(uses the nearest neighbour algorithm)')
         self.nearest_neighbour_button.setProperty('role', 'beginAlgorithm')
         update_style(self.nearest_neighbour_button)
 
@@ -927,20 +922,20 @@ class MainWindow(QMainWindow):
 
                 #↑↗→↘↓↙←↖
                 if arc_weight_text_str[-1] == '↑' or arc_weight_text_str[-1] == '↓':
-                    shift_x = -20
+                    shift_x = -17
                     shift_y = 0
                     #Moving it up to prevent horizontal overlap with other arc_weight
-                    arc_weight_text.moveBy(-20, -20)
+                    arc_weight_text.moveBy(-17, -17)
                 else:
                     if arc_weight_text_str[-1] == '↘' or arc_weight_text_str[-1] == '↖':
-                        shift_x = 20
-                        shift_y = -20
+                        shift_x = 17
+                        shift_y = -17
                     elif arc_weight_text_str[-1] == '↗' or arc_weight_text_str[-1] == '↙':
-                        shift_x = -20
-                        shift_y = -20
+                        shift_x = -17
+                        shift_y = -17
                     elif arc_weight_text_str[-1] == '←' or arc_weight_text_str[-1] == '→':
                         shift_x = 0
-                        shift_y = -20
+                        shift_y = -17
                     # Altering the position of the arc_weight_text
                     arc_weight_text.moveBy(shift_x, shift_y)
 
@@ -1016,7 +1011,7 @@ class MainWindow(QMainWindow):
             try:
                 #If the other directed arc is ↑ or ↓
                 if shift_y == 0:
-                    text_shift = 20
+                    text_shift = 17
                 else:
                     text_shift = 0
             except NameError:
@@ -1340,6 +1335,11 @@ class MainWindow(QMainWindow):
 
         #Finishing and showing the replay
         self.replay_route_button.setEnabled(True)
+
+    def wipe_graph(self):
+        for item in list(self.workspace.items()):
+            self.workspace.removeItem(item)
+        self.graph, self.vertices, self.arcs = {}, {}, {}
 
 
 app = QApplication([])
