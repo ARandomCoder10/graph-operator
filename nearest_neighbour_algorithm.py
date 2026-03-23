@@ -263,6 +263,13 @@ def solve(graph, directed, principal):
             final_tours_optimised[0].append(tour[0])
         final_tours = deepcopy(final_tours_optimised)
 
+    # -----------------------------------------------------
+    # Measuring the runtime manually (for testing purposes)
+    end = perf_counter()
+    runtime = end - start
+    #print(f'K{n}: {runtime}s')
+    # -----------------------------------------------------
+
     return final_tours
 
 #Algorithm fully works!
