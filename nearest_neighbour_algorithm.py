@@ -76,11 +76,13 @@
 #}
 #directed = True
 
-#-----------------------------------------------------
-#Measuring the runtime manually (for testing purposes)
-#from time import perf_counter
-#start = perf_counter()
-#-----------------------------------------------------
+from copy import deepcopy
+def solve(graph, directed, principal):
+    # -----------------------------------------------------
+    # Measuring the runtime manually (for testing purposes)
+    from time import perf_counter
+    start = perf_counter()
+    # -----------------------------------------------------
 
 from copy import deepcopy
 def solve(graph, directed, principal):
