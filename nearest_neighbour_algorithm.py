@@ -311,33 +311,47 @@ directed = False
 #}
 #directed = True
 
-# Data from the June 2024 Question 2
-graph = {
-    'A': {'B': 50.0, 'C': 59.0, 'D': 26.0, 'E': 50.0, 'F': 40.0, 'G': 87.0, 'H': 63.0, 'J': 59.0},
-    'B': {'A': 50.0, 'C': 28.0, 'D': 61.0, 'E': 79.0, 'F': 63.0, 'G': 45.0, 'H': 64.0, 'J': 48.0},
-    'C': {'A': 59.0, 'B': 28.0, 'D': 33.0, 'E': 57.0, 'F': 35.0, 'G': 70.0, 'H': 36.0, 'J': 45.0},
-    'D': {'A': 26.0, 'B': 61.0, 'C': 33.0, 'E': 24.0, 'F': 64.0, 'G': 71.0, 'H': 37.0, 'J': 33.0},
-    'E': {'A': 50.0, 'B': 79.0, 'C': 57.0, 'D': 24.0, 'F': 40.0, 'G': 64.0, 'H': 30.0, 'J': 31.0},
-    'F': {'A': 40.0, 'B': 63.0, 'C': 35.0, 'D': 64.0, 'E': 40.0, 'G': 47.0, 'H': 70.0, 'J': 71.0},
-    'G': {'A': 87.0, 'B': 45.0, 'C': 70.0, 'D': 71.0, 'E': 64.0, 'F': 47.0, 'H': 34.0, 'J': 67.0},
-    'H': {'A': 63.0, 'B': 64.0, 'C': 36.0, 'D': 37.0, 'E': 30.0, 'F': 70.0, 'G': 34.0, 'J': 33.0},
-    'J': {'A': 59.0, 'B': 48.0, 'C': 45.0, 'D': 33.0, 'E': 31.0, 'F': 71.0, 'G': 67.0, 'H': 33.0}
-}
-directed = False
+import random
+letters = 'ABCDEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"£$%^&*()-=[]:;@<>?+_.,{}~'
+graph = {}
+n = 2
 
-#from random import randint
-#letters = 'ABCDEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"£$%^&*()-=[]:;@<>?+_.,{}~'
-#graph = {}
-#n = 2
-#directed = True
-#for i in range(78):
-#    n += 1
-#    for key in letters[:n]:
-#        graph[key] = {}
-#        for vertex in letters[:n]:
-#            if vertex != key:
-#               graph[key][vertex] = randint(1, 1000)
-a = solve(graph, directed, 'A')
+for i in range(78):
+    directed = False
+    n += 1
+
+    for key in letters[:n]:
+        graph[key] = {}
+
+    for key in letters[:n-1]:
+        index = letters.index(key) + 1
+
+        for vertex in letters[index:n]:
+            #75% chance of there being an arc
+            if random.random() <= 0.75:
+
+                #85% chance it is undirected
+                if random.random() <= 0.85:
+                    a = random.randint(1, 1000)
+                    graph[key][vertex] = a
+                    graph[vertex][key] = a
+
+                #15% chance it is directed
+                else:
+                    #40% chance it goes one direction
+                    if random.random() <= 0.4:
+                        graph[key][vertex] = random.randint(1, 1000)
+                    elif 0.4 < random.random() <= 0.8:
+                        graph[vertex][key] = random.randint(1, 1000)
+
+                    #20% chance it goes both directions
+                    else:
+                        graph[key][vertex] = random.randint(1, 1000)
+                        graph[vertex][key] = random.randint(1, 1000)
+
+                    directed = True
+
+    a = solve(graph, directed, 'A', n)
 
 #10: 0.015617900062352419s
 #15: 0.028577700024470687s
