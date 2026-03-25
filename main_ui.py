@@ -1051,6 +1051,26 @@ class MainWindow(QMainWindow):
                 self.isolate_role(self.nearest_neighbour_button)
                 self.prompt_bar.setText('Select your <strong>start-and-return</strong> stop')
 
+                #If the first time, informing the user of the limitations
+                if self.nearest_neighbour_first:
+                    message = QMessageBox()
+                    message.setWindowTitle('Explaining the Algorithm')
+                    message.setIcon(QMessageBox.Icon.Warning)
+                    message.setText('''Though the algorithm consistently finds the 
+most efficient routes with high accuracies,
+
+due to its nature, it isn't 100% accurate and,
+at times, can omit more efficient routes.''')
+                    message.exec()
+                    self.nearest_neighbour_first = False
+
+            #MOCK-UP MESSAGE TEXT
+            # This is because of the nature of the algorithm;
+            # when choosing the next path to go along, the algorithm
+            # goes along the immediate shortest path instead of
+            # evaluating all paths and selecting the most efficient at
+            # the end.
+
             #Styling every vertex
             for vertex in self.vertices.values():
                 vertex[0].childItems()[0].set_algorithm_unselected(
