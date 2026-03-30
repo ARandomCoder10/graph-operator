@@ -66,6 +66,7 @@
 #}
 #directed = True
 
+#fifth test data
 #graph = {
 #    'A': {'B': 1, 'C': 1},
 #    'B': {'A': 1, 'C': 1, 'D': 1},
@@ -76,13 +77,28 @@
 #}
 #directed = True
 
+#sixth test data
+#graph = {
+#    'A': {'B': 2, 'C': 14, 'D': 21, 'E': 22},
+#    'B': {'A': 2, 'C': 12, 'D': 19, 'F': 23},
+#    'C': {'A': 14, 'B': 12, 'D': 7, 'E': 8, 'F': 11},
+#    'D': {'A': 21, 'B': 19, 'C': 7, 'E': 1, 'F': 4},
+#    'E': {'A': 22, 'C': 8, 'D': 1, 'F': 3},
+#    'F': {'B': 23, 'C': 11, 'D': 4, 'E': 3}
+#}
+#directed = False
+
+
+
+
+#def factorial(n):
+#    if n == 0:
+#        return 1
+#    else:
+#        return n * factorial(n-1)
+
 from copy import deepcopy
 def solve(graph, directed, principal):
-    # -----------------------------------------------------
-    # Measuring the runtime manually (for testing purposes)
-    from time import perf_counter
-    start = perf_counter()
-    # -----------------------------------------------------
 
     final_tours = []
     graphs = [deepcopy(graph)]
@@ -97,21 +113,21 @@ def solve(graph, directed, principal):
     
         #Adding the arc weights
         for graph_vertex in graph:
-            for arc_vertex, arc_weight in graph[graph_vertex].items():
+            for arc_vertex in graph[graph_vertex].keys():
                 if graph_vertex in graph[arc_vertex]: #Checking against one-way directed arcs
-                    graph_b[arc_vertex][graph_vertex] = arc_weight
+                    graph_b[arc_vertex][graph_vertex] = graph[graph_vertex][arc_vertex]
     
         graphs.append(graph_b)
     
     #Operating on each transposition
     #the state to know which transposition
-    for state, graph in enumerate(graphs):
+    for state, graph_t in enumerate(graphs):
 
         total_weight, incompatible = 0.0, False
 
         visiting_vertex = principal
         pathway = [principal]
-        graph_principal = deepcopy(graph)
+        graph_principal = deepcopy(graph_t)
         incomplete = True
 
         for vertex in graph_principal:
@@ -131,28 +147,28 @@ def solve(graph, directed, principal):
 
                 # Iterating through to find the connected vertex to the minimum arc weight
                 for arc_vertex, arc_weight in adj_arcs.items():
-                    #if arc_weight == minimum:
+                    if arc_weight == minimum:
 
-                    #Retrieving the graph_neigh for the already
-                    #determined part of the pathway
-                    for tour in final_tours:
-                        if tour[0] == pathway:
-                            #Copying the graph at such stage
-                            graph_neigh = deepcopy(tour[2])
-                            break
+                        #Retrieving the graph_neigh for the already
+                        #determined part of the pathway
+                        for tour in final_tours:
+                            if tour[0] == pathway:
+                                #Copying the graph at such stage
+                                graph_neigh = deepcopy(tour[2])
+                                break
 
-                    #Correcting the graph_neigh to this pathway by
-                    #removing each arc connected to the arc_vertex
-                    graph_neigh_temp = deepcopy(graph_neigh)
-                    for graph_vertex in graph_neigh_temp:
-                        if arc_vertex in graph_neigh_temp[graph_vertex]:
-                            graph_neigh_temp[graph_vertex].pop(arc_vertex)
+                        #Correcting the graph_neigh to this pathway by
+                        #removing each arc connected to the arc_vertex
+                        graph_neigh_temp = deepcopy(graph_neigh)
+                        for graph_vertex in graph_neigh_temp:
+                            if arc_vertex in graph_neigh_temp[graph_vertex]:
+                                graph_neigh_temp[graph_vertex].pop(arc_vertex)
 
-                    #Updating the final tours
-                    final_tours.append(
-                        [pathway + [arc_vertex], (total_weight + arc_weight).__round__(4),
-                         graph_neigh_temp, state])
-                    #Adding the graph's index is for a marker for if this was from the transposed graph
+                        #Updating the final tours
+                        final_tours.append(
+                            [pathway + [arc_vertex], (total_weight + arc_weight).__round__(4),
+                             graph_neigh_temp, state])
+                        #Adding the graph's index is for a marker for if this was from the transposed graph
 
                 final_tours.remove([pathway, total_weight, graph_neigh, state])
 
@@ -188,41 +204,27 @@ def solve(graph, directed, principal):
 
     final_tours_compatible = []
     for tour in final_tours:
-        #Removing the graph_neigh from each tour
-        if len(tour) == 4:
-            pathway = tour[0]
-            final_stop = pathway[-1]
+        # Reversing the pathway for each transposed tour
+        if tour[-1] == 1:
+            tour[0] = tour[0][::-1]
 
-            #The final check for incompatibility - can it return?
-            if principal in graph[final_stop]:
-                pathway.append(principal)
-                tour[1] = (tour[1] + graph[final_stop][principal]).__round__(4)
-                tour.remove(tour[2])
+        pathway = tour[0]
+        final_stop = pathway[-1]
 
-                # Reversing the pathway for each transposed tour
-                if tour[-1] == 1:
-                    tour[0] = tour[0][::-1]
+        #The final check for incompatibility - can it return?
+        if principal in graph[final_stop]:
+            pathway.append(principal)
+            tour[1] = (tour[1] + graph[final_stop][principal]).__round__(4)
+            tour.remove(tour[2])
 
-                final_tours_compatible.append(tour)
+            final_tours_compatible.append(tour)
 
     final_tours = deepcopy(final_tours_compatible)
-    pass
-
-    #try:
-    #    if incompatible_tour in final_tours:
-    #        final_tours.remove(incompatible_tour)
-    #except NameError:
-    #    pass
-
-    #Only one run for one vertex
-    #if principal_specified:
-        #break
 
     if final_tours != []:
         #Removing the no-longer-needed state
         for tour in final_tours:
-           tour.pop()
-
+            tour.pop()
 
         #Isolating the shortest tours
         tour_weights = []
@@ -256,105 +258,57 @@ def solve(graph, directed, principal):
                 if [tour[0][::-1], tour[1]] not in final_tours:
                     final_tours_full.append([tour[0][::-1], tour[1]])
             final_tours = deepcopy(final_tours_full)
+        found_tours = len(final_tours)
 
-        pass
         #Data storage optimisation
         final_tours_optimised = [[], minimum_tour_weight]
         for tour in final_tours:
             final_tours_optimised[0].append(tour[0])
         final_tours = deepcopy(final_tours_optimised)
 
-    # -----------------------------------------------------
-    # Measuring the runtime manually (for testing purposes)
-    end = perf_counter()
-    runtime = end - start
-    #print(f'K{n}: {runtime}s')
-    # -----------------------------------------------------
-
     return final_tours
 
 #Algorithm fully works!
-pass
+#pass
 
-#
-
-#The third test data - extreme boundary producing (n-1)! tours
-
-
-
-
-graph = {
-    'A': {'B': 2, 'C': 14, 'D': 21, 'E': 22},
-    'B': {'A': 2, 'C': 12, 'D': 19, 'F': 23},
-    'C': {'A': 14, 'B': 12, 'D': 7, 'E': 8, 'F': 11},
-    'D': {'A': 21, 'B': 19, 'C': 7, 'E': 1, 'F': 4},
-    'E': {'A': 22, 'C': 8, 'D': 1, 'F': 3},
-    'F': {'B': 23, 'C': 11, 'D': 4, 'E': 3}
-}
-directed = False
-
-#graph = {
-#    'A': {'B': 1, 'C': 1, 'D': 1, 'E': 1},
-#    'B': {},
-#    'C': {},
-#    'D': {},
-#    'E': {}
-#}
-
-#graph = {
-#    'A': {'B': 12.0, 'C': 24.0, 'D': 20.0, 'E': 23.0, 'F': 11.0},
-#    'B': {'A': 12.0, 'C': 12.0, 'D': 8.0, 'E': 24.0, 'F': 21.0},
-#    'C': {'A': 28.0, 'B': 2.0, 'D': 4.0, 'E': 12.0, 'F': 2.0},
-#    'D': {'A': 24.0, 'B': 21.0, 'C': 4.0, 'E': 16.0, 'F': 13.0},
-#    'E': {'A': 23.0, 'B': 29.0, 'C': 12.0, 'D': 16.0, 'F': 12.0},
-#    'F': {'A': 11.0, 'B': 23.0, 'C': 17.0, 'D': 13.0, 'E': 12.0},
-#}
-#directed = True
-
+#seventh test data - randomised graphs
 import random
-letters = 'ABCDEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"£$%^&*()-=[]:;@<>?+_.,{}~'
-graph = {}
-n = 2
+#letters = 'ABCDEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"£$%^&*()-=[]:;@<>?+_.,{}~'
+#graph = {}
+#n = 2
 
-for i in range(78):
-    directed = False
-    n += 1
-
-    for key in letters[:n]:
-        graph[key] = {}
-
-    for key in letters[:n-1]:
-        index = letters.index(key) + 1
-
-        for vertex in letters[index:n]:
-            #75% chance of there being an arc
-            if random.random() <= 0.75:
-
-                #85% chance it is undirected
-                if random.random() <= 0.85:
-                    a = random.randint(1, 1000)
-                    graph[key][vertex] = a
-                    graph[vertex][key] = a
-
-                #15% chance it is directed
-                else:
-                    #40% chance it goes one direction
-                    if random.random() <= 0.4:
-                        graph[key][vertex] = random.randint(1, 1000)
-                    elif 0.4 < random.random() <= 0.8:
-                        graph[vertex][key] = random.randint(1, 1000)
-
-                    #20% chance it goes both directions
-                    else:
-                        graph[key][vertex] = random.randint(1, 1000)
-                        graph[vertex][key] = random.randint(1, 1000)
-
-                    directed = True
-
-    a = solve(graph, directed, 'A', n)
-
-#10: 0.015617900062352419s
-#15: 0.028577700024470687s
-#20: 0.039780500112101436s
-#25: 0.07210410002153367s
-#30: 0.143935
+#for i in range(78):
+#    directed = False
+#    n += 1
+#
+#    for key in letters[:n]:
+#        graph[key] = {}
+#
+#    for key in letters[:n-1]:
+#        index = letters.index(key) + 1
+#
+#        for vertex in letters[index:n]:
+#            #75% chance of there being an arc
+#            if random.random() <= 0.75:
+#
+#                #85% chance it is undirected
+#                if random.random() <= 0.85:
+#                    a = random.randint(1, 1000)
+#                    graph[key][vertex] = a
+#                    graph[vertex][key] = a
+#
+#                #15% chance it is directed
+#                else:
+#                    #40% chance it goes one direction
+#                    if random.random() <= 0.4:
+#                        graph[key][vertex] = random.randint(1, 1000)
+#                    elif 0.4 < random.random() <= 0.8:
+#                        graph[vertex][key] = random.randint(1, 1000)
+#
+#                    #20% chance it goes both directions
+#                    else:
+#                        graph[key][vertex] = random.randint(1, 1000)
+#                        graph[vertex][key] = random.randint(1, 1000)
+#
+#                    directed = True
+#    a = solve(graph, directed, 'A')

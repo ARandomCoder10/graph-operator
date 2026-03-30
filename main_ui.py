@@ -110,7 +110,7 @@ def text_styling(object, text, text_color):
             }
         </style>
         
-        <span>&nbsp;*** </span>
+        <span>***</span>
     '''
 
     if object == 'vertex':
@@ -126,15 +126,16 @@ def text_styling(object, text, text_color):
             html = html.replace('--', '25')
 
         html = html.replace(']]]]]', '')
+        html = html.replace('***', text)
 
     else:
 
         html = html.replace('--', '20')
         html = html.replace(']]]]]',
                             'background-color: white; padding: 3px')
+        html = html.replace('***', f'&nbsp;{text} ')
 
     html = html.replace('######', text_color)
-    html = html.replace('***', text)
 
     return html
 
@@ -259,6 +260,7 @@ class AddArcDialog(QDialog):
         self.arc_weight_input_warning.hide()
 
         self.arc_weight_input.textEdited.connect(self.hide_arc_weight_warning)
+        self.arc_weight_input.textEdited.connect(self.comma_check)
 
 
         #---------------------------------------------------------------------------
@@ -352,6 +354,18 @@ class AddArcDialog(QDialog):
 
         self.setWindowFlag(Qt.WindowType.WindowCloseButtonHint, False)
 
+    def show_directed_routes(self, option):
+        if option.text() == 'One-way':
+            #Showing the route options
+            self.main_layout.insertWidget(5, self.direction_route_container)
+            self.route_1.show()
+            self.route_2.show()
+        else:
+            self.main_layout.removeWidget(self.direction_route_container)
+            self.route_1.hide()
+            self.route_2.hide()
+            QTimer.singleShot(0, self.adjustSize)
+
     #Preventing a loop
     def loop_check(self):
         loop_present = self.stop_1.currentIndex() == self.stop_2.currentIndex()
@@ -365,25 +379,13 @@ class AddArcDialog(QDialog):
             self.stop_input_warning.hide()
             QTimer.singleShot(0, self.adjustSize)
 
-        #Deactivating or reactivating all functions
+        # Deactivating or reactivating all functions
         self.arc_weight_input.setDisabled(loop_present)
         self.directed_choice.setDisabled(loop_present)
         self.undirected_choice.setDisabled(loop_present)
         self.route_1.setDisabled(loop_present)
         self.route_2.setDisabled(loop_present)
         self.ok_button.setDisabled(loop_present)
-
-    def show_directed_routes(self, option):
-        if option.text() == 'One-way':
-            #Showing the route options
-            self.main_layout.insertWidget(5, self.direction_route_container)
-            self.route_1.show()
-            self.route_2.show()
-        else:
-            self.main_layout.removeWidget(self.direction_route_container)
-            self.route_1.hide()
-            self.route_2.hide()
-            QTimer.singleShot(0, self.adjustSize)
 
     def arc_presence_check(self):
         stop_1_to_2_present = self.stop_2.currentText() in self.arcs[self.stop_1.currentText()]
@@ -425,13 +427,19 @@ class AddArcDialog(QDialog):
             self.arc_presence_warning.hide()
         QTimer.singleShot(0, self.adjustSize)
 
+    def comma_check(self):
+        if ',' in self.arc_weight_input.text():
+            self.arc_weight_input.setText(self.arc_weight_input.text().strip(','))
+
     def confirm_validation(self):
         if self.arc_weight_input.text() == '':
             self.arc_weight_input_warning.setText('Please enter a number.')
             self.arc_weight_input_warning.show()
+
         elif float(self.arc_weight_input.text()) == 0:
             self.arc_weight_input_warning.setText('Please enter a positive number.')
             self.arc_weight_input_warning.show()
+
         else:
             self.accept()
 
@@ -548,6 +556,7 @@ class VertexIdentifierEffect(QGraphicsDropShadowEffect):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.add_arc_active = False
         self.setMinimumSize(1539, 841)
         self.setWindowTitle('Graph Operator')
         self.vertices = {} #Referencing each vertex by its identifier
@@ -589,20 +598,20 @@ class MainWindow(QMainWindow):
         self.undo_action.setIcon(QIcon(r'icons\undo.png'))
         self.undo_action.setIconSize(QSize(34, 34))
         self.undo_action.setFixedSize(34, 34)
-        self.undo_action.setToolTip('Undo')
+        self.undo_action.setToolTip('Undo (feature currently unavailable)')
 
         #The Redo Button
         self.redo_action = QToolButton(self)
         self.redo_action.setIcon(QIcon(r'icons\redo.png'))
         self.redo_action.setIconSize(QSize(34, 34))
         self.redo_action.setFixedSize(34, 34)
-        self.redo_action.setToolTip('Redo')
+        self.redo_action.setToolTip('Redo (feature currently unavailable)')
 
         #Open, Save & Wipe
         self.open_action = QAction('Open')
-        self.open_action.setToolTip('Open a previously saved graph')
+        self.open_action.setToolTip('Open a previously saved graph (feature currently unavailable)')
         self.save_action = QAction('Save')
-        self.save_action.setToolTip('Save this graph to a file')
+        self.save_action.setToolTip('Save this graph to a file (feature currently unavailable)')
         self.wipe_action = QAction('Wipe')
         self.wipe_action.setToolTip('Delete the graph entirely')
         self.wipe_action.triggered.connect(self.wipe_graph)
@@ -665,7 +674,7 @@ class MainWindow(QMainWindow):
         self.exit_button.setIconSize(QSize(36, 36))
         self.exit_button.setProperty('role', 'controlProcess')
         update_style(self.exit_button)
-        self.exit_button.setToolTip('Exit')
+        self.exit_button.setToolTip('Exit process')
         self.exit_button.hide()
 
         #Setting the horizontal layout
@@ -693,7 +702,7 @@ class MainWindow(QMainWindow):
         self.dijkstra_button.setFixedSize(91, 91)
         self.dijkstra_button.setIcon(QIcon(r'icons\dijkstra.png'))
         self.dijkstra_button.setIconSize(QSize(91, 91))
-        self.dijkstra_button.setToolTip("Find the shortest path from one stop to another\n(uses Dijkstra's algorithm)")
+        self.dijkstra_button.setToolTip("Find the shortest route from one stop to another\n(uses Dijkstra's algorithm)")
         self.dijkstra_button.setProperty('role', 'beginAlgorithm')
         update_style(self.dijkstra_button)
 
@@ -702,7 +711,7 @@ class MainWindow(QMainWindow):
         self.nearest_neighbour_button.setFixedSize(91, 91)
         self.nearest_neighbour_button.setIcon(QIcon(r'icons\nearest neighbour.png'))
         self.nearest_neighbour_button.setIconSize(QSize(91, 91))
-        self.nearest_neighbour_button.setToolTip('Find the shortest path to visit all stops exactly once and return\n(uses the nearest neighbour algorithm)')
+        self.nearest_neighbour_button.setToolTip('Find the shortest route to visit all stops exactly once and return\n(uses the nearest neighbour algorithm)')
         self.nearest_neighbour_button.setProperty('role', 'beginAlgorithm')
         update_style(self.nearest_neighbour_button)
 
@@ -746,6 +755,9 @@ class MainWindow(QMainWindow):
         self.replay_route_button.setToolTip('Replay the route display')
         self.replay_route_button.hide()
 
+        #-------------------------------------------------------------------------------------
+        #KEY VARIABLES
+
         self.dijkstra_button.setEnabled(True)
         self.nearest_neighbour_button.setEnabled(True)
 
@@ -768,8 +780,7 @@ class MainWindow(QMainWindow):
             }
         }
 
-        # the two states of selection
-        self.dijkstra_state = 'origin'
+        self.nearest_neighbour_first = True
 
         self.add_vertex_button.clicked.connect(self.add_a_vertex)
         self.add_arc_button.clicked.connect(self.add_an_arc)
@@ -794,8 +805,6 @@ class MainWindow(QMainWindow):
 
         self.prompt_bar.hide()
         self.exit_button.hide()
-
-        self.add_vertex_active = False
 
         if self.algorithm_vertex_select or self.algorithm_route_display:
             #Redisplaying the vertices
@@ -852,191 +861,202 @@ class MainWindow(QMainWindow):
         self.exit_button.clicked.connect(self.exit_process)
 
     def add_an_arc(self):
-        self.isolate_role(self.add_arc_button)
+        if len(self.vertices) >= 2:
+            self.isolate_role(self.add_arc_button)
 
-        #Displaying the add_arc dialog
-        add_arc_dialog = AddArcDialog(list(self.graph.keys()), self.arcs)
+            #Displaying the add_arc dialog
+            add_arc_dialog = AddArcDialog(list(self.graph.keys()), self.arcs)
 
-        if add_arc_dialog.exec() == QDialog.DialogCode.Accepted:
+            if add_arc_dialog.exec() == QDialog.DialogCode.Accepted:
+                #self.start = perf_counter()
 
-            #Retrieving all values
-            stop_1 = add_arc_dialog.get_stop_1()
-            stop_2 = add_arc_dialog.get_stop_2()
-            direction_option = add_arc_dialog.get_direction()
-            directed_route, other_direction_present = add_arc_dialog.get_route()
-            #Removing unnecessary decimal points from floats
-            arc_weight = add_arc_dialog.get_arc_weight()
-            arc_weight = float(arc_weight) if '.' in arc_weight else int(arc_weight)
+                #Retrieving all values
+                stop_1 = add_arc_dialog.get_stop_1()
+                stop_2 = add_arc_dialog.get_stop_2()
+                direction_option = add_arc_dialog.get_direction()
+                directed_route, other_direction_present = add_arc_dialog.get_route()
+                #Removing unnecessary decimal points from floats
+                arc_weight = add_arc_dialog.get_arc_weight()
+                arc_weight = float(arc_weight) if '.' in arc_weight else int(arc_weight)
 
-            #Updating the graph
-            if direction_option == 'Two-way':
-                self.graph[stop_1][stop_2] = arc_weight
-                self.graph[stop_2][stop_1] = arc_weight
-            else:
-                if directed_route == f'{stop_1} → {stop_2}':
+                #Updating the graph
+                if direction_option == 'Two-way':
                     self.graph[stop_1][stop_2] = arc_weight
-                else:
                     self.graph[stop_2][stop_1] = arc_weight
-                    #Swapping the direction
-                    stop_1, stop_2 = stop_2, stop_1
-                self.directed = True
-
-            #Drawing the arc
-            stop_1_x, stop_1_y, stop_2_x, stop_2_y = '', '', '', ''
-
-            #Finding the positions of each vertex
-            for vertex in self.vertices.values():
-
-                #If the text is met...
-                if text_item_to_string(vertex[0].childItems()[1]) == stop_1:
-                    stop_1_x = vertex[1][0]
-                    stop_1_y = vertex[1][1]
-                elif text_item_to_string(vertex[0].childItems()[1]) == stop_2:
-                    stop_2_x = vertex[1][0]
-                    stop_2_y = vertex[1][1]
-                #Once both are found, stop the search
-                if '' not in (stop_1_x, stop_1_y, stop_2_x, stop_2_y):
-                    break
-
-            #Adding multidirectional arcs between two vertices
-            if direction_option == 'One-way' and other_direction_present:
-
-                #Retrieving the arc going the other way
-                if directed_route == f'{stop_1} → {stop_2}':
-                    arc = self.arcs[stop_2][stop_1].childItems()[0]
-                    arc_weight_text = self.arcs[stop_2][stop_1].childItems()[1]
-
-                elif directed_route == f'{stop_2} → {stop_1}':
-                    arc = self.arcs[stop_1][stop_2].childItems()[0]
-                    arc_weight_text = self.arcs[stop_1][stop_2].childItems()[1]
-
-                arc_line = arc.line()
-
-                #Getting the bounding coordinates
-                start_point_x = arc_line.p1().x()
-                start_point_y = arc_line.p1().y()
-                end_point_x = arc_line.p2().x()
-                end_point_y = arc_line.p2().y()
-
-                arc_weight_text_str = text_item_to_string(arc_weight_text)
-
-                #↑↗→↘↓↙←↖
-                if arc_weight_text_str[-1] == '↑' or arc_weight_text_str[-1] == '↓':
-                    shift_x = -17
-                    shift_y = 0
-                    #Moving it up to prevent horizontal overlap with other arc_weight
-                    arc_weight_text.moveBy(-17, -17)
                 else:
-                    if arc_weight_text_str[-1] == '↘' or arc_weight_text_str[-1] == '↖':
-                        shift_x = 17
-                        shift_y = -17
-                    elif arc_weight_text_str[-1] == '↗' or arc_weight_text_str[-1] == '↙':
+                    if directed_route == f'{stop_1} → {stop_2}':
+                        self.graph[stop_1][stop_2] = arc_weight
+                    else:
+                        self.graph[stop_2][stop_1] = arc_weight
+                        #Swapping the direction
+                        stop_1, stop_2 = stop_2, stop_1
+                    self.directed = True
+
+                #Drawing the arc
+                stop_1_x, stop_1_y, stop_2_x, stop_2_y = '', '', '', ''
+
+                #Finding the positions of each vertex
+                for vertex in self.vertices.values():
+
+                    #If the text is met...
+                    if text_item_to_string(vertex[0].childItems()[1]) == stop_1:
+                        stop_1_x = vertex[1][0]
+                        stop_1_y = vertex[1][1]
+                    elif text_item_to_string(vertex[0].childItems()[1]) == stop_2:
+                        stop_2_x = vertex[1][0]
+                        stop_2_y = vertex[1][1]
+                    #Once both are found, stop the search
+                    if '' not in (stop_1_x, stop_1_y, stop_2_x, stop_2_y):
+                        break
+
+                #Adding multidirectional arcs between two vertices
+                if direction_option == 'One-way' and other_direction_present:
+
+                    #Retrieving the arc going the other way
+                    if directed_route == f'{stop_1} → {stop_2}':
+                        arc = self.arcs[stop_2][stop_1].childItems()[0]
+                        arc_weight_text = self.arcs[stop_2][stop_1].childItems()[1]
+
+                    elif directed_route == f'{stop_2} → {stop_1}':
+                        arc = self.arcs[stop_1][stop_2].childItems()[0]
+                        arc_weight_text = self.arcs[stop_1][stop_2].childItems()[1]
+
+                    arc_line = arc.line()
+
+                    #Getting the bounding coordinates
+                    start_point_x = arc_line.p1().x()
+                    start_point_y = arc_line.p1().y()
+                    end_point_x = arc_line.p2().x()
+                    end_point_y = arc_line.p2().y()
+
+                    arc_weight_text_str = text_item_to_string(arc_weight_text)
+
+                    #↑↗→↘↓↙←↖
+                    if arc_weight_text_str[-1] == '↑' or arc_weight_text_str[-1] == '↓':
                         shift_x = -17
-                        shift_y = -17
-                    elif arc_weight_text_str[-1] == '←' or arc_weight_text_str[-1] == '→':
-                        shift_x = 0
-                        shift_y = -17
-                    # Altering the position of the arc_weight_text
-                    arc_weight_text.moveBy(shift_x, shift_y)
-
-                #Altering the position & redrawing the arc
-                arc.setLine(start_point_x + shift_x, start_point_y + shift_y,
-                            end_point_x + shift_x, end_point_y + shift_y)
-                arc.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
-                arc.update()
-
-                #Setting the position of the new arc
-                stop_1_x -= shift_x
-                stop_2_x -= shift_x
-                stop_1_y -= shift_y
-                stop_2_y -= shift_y
-
-            #Drawing it to the vertices' centres
-            arc_line = QGraphicsLineItem(
-                stop_1_x, stop_1_y,
-                stop_2_x, stop_2_y
-            )
-            arc_line.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
-            self.workspace.addItem(arc_line)
-
-            #Finding the midpoints of the x & y coordinates
-            if stop_2_x > stop_1_x: #If stop 2 more to the right than stop 1...
-                midpoint_x = stop_1_x + (stop_2_x - stop_1_x) // 2
-            elif stop_2_x < stop_1_x:
-                midpoint_x = stop_2_x + (stop_1_x - stop_2_x) // 2
-            else:
-                midpoint_x = stop_1_x
-
-            if stop_2_y > stop_1_y:  # If stop 2 is further down than stop 1...
-                midpoint_y = stop_1_y + (stop_2_y - stop_1_y) // 2
-            elif stop_2_y < stop_1_y:
-                midpoint_y = stop_2_y + (stop_1_y - stop_2_y) // 2
-            else:
-                midpoint_y = stop_1_y
-
-            #Displaying the arc weight
-            arc_weight_text = QGraphicsTextItem()
-
-            #Setting a visual arrow - ↑↗→↘↓↙←↖
-            if direction_option == 'One-way':
-
-                if stop_1_x - 21 <= stop_2_x <= stop_1_x + 21:
-                    if stop_1_y > stop_2_y:
-                        arrow = '↑'
+                        shift_y = 0
+                        #Moving it up to prevent horizontal overlap with other arc_weight
+                        arc_weight_text.moveBy(-17, -17)
                     else:
-                        arrow = '↓'
+                        if arc_weight_text_str[-1] == '↘' or arc_weight_text_str[-1] == '↖':
+                            shift_x = 17
+                            shift_y = -17
+                        elif arc_weight_text_str[-1] == '↗' or arc_weight_text_str[-1] == '↙':
+                            shift_x = -17
+                            shift_y = -17
+                        elif arc_weight_text_str[-1] == '←' or arc_weight_text_str[-1] == '→':
+                            shift_x = 0
+                            shift_y = -17
+                        # Altering the position of the arc_weight_text
+                        arc_weight_text.moveBy(shift_x, shift_y)
 
-                elif stop_1_x < stop_2_x:
-                    if stop_1_y - 21 <= stop_2_y <= stop_1_y + 21:
-                        arrow = '→'
-                    elif stop_1_y > stop_2_y:
-                        arrow = '↗'
-                    else:
-                        arrow = '↘'
+                    #Altering the position & redrawing the arc
+                    arc.setLine(start_point_x + shift_x, start_point_y + shift_y,
+                                end_point_x + shift_x, end_point_y + shift_y)
+                    arc.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
+                    arc.update()
 
+                    #Setting the position of the new arc
+                    stop_1_x -= shift_x
+                    stop_2_x -= shift_x
+                    stop_1_y -= shift_y
+                    stop_2_y -= shift_y
+
+                #Drawing it to the vertices' centres
+                arc_line = QGraphicsLineItem(
+                    stop_1_x, stop_1_y,
+                    stop_2_x, stop_2_y
+                )
+                arc_line.setPen(QPen(QColor(Qt.GlobalColor.black), 4))
+                self.workspace.addItem(arc_line)
+
+                #Finding the midpoints of the x & y coordinates
+                if stop_2_x > stop_1_x: #If stop 2 more to the right than stop 1...
+                    midpoint_x = stop_1_x + (stop_2_x - stop_1_x) // 2
+                elif stop_2_x < stop_1_x:
+                    midpoint_x = stop_2_x + (stop_1_x - stop_2_x) // 2
                 else:
-                    if stop_1_y - 21 <= stop_2_y <= stop_1_y + 21:
-                        arrow = '←'
-                    elif stop_1_y > stop_2_y:
-                        arrow = '↖'
-                    else:
-                        arrow = '↙'
+                    midpoint_x = stop_1_x
 
-                arc_weight_text.setHtml(text_styling('arc', f'{str(arc_weight)} {arrow}', 'black'))
-            else:
-                arc_weight_text.setHtml(text_styling('arc', str(arc_weight), 'black'))
-            # Force repaint
-            arc_weight_text.update()
-
-            try:
-                #If the other directed arc is ↑ or ↓
-                if shift_y == 0:
-                    text_shift = 17
+                if stop_2_y > stop_1_y:  # If stop 2 is further down than stop 1...
+                    midpoint_y = stop_1_y + (stop_2_y - stop_1_y) // 2
+                elif stop_2_y < stop_1_y:
+                    midpoint_y = stop_2_y + (stop_1_y - stop_2_y) // 2
                 else:
+                    midpoint_y = stop_1_y
+
+                #Displaying the arc weight
+                arc_weight_text = QGraphicsTextItem()
+
+                #Setting a visual arrow - ↑↗→↘↓↙←↖
+                if direction_option == 'One-way':
+
+                    if stop_1_x - 21 <= stop_2_x <= stop_1_x + 21:
+                        if stop_1_y > stop_2_y:
+                            arrow = '↑'
+                        else:
+                            arrow = '↓'
+
+                    elif stop_1_x < stop_2_x:
+                        if stop_1_y - 21 <= stop_2_y <= stop_1_y + 21:
+                            arrow = '→'
+                        elif stop_1_y > stop_2_y:
+                            arrow = '↗'
+                        else:
+                            arrow = '↘'
+
+                    else:
+                        if stop_1_y - 21 <= stop_2_y <= stop_1_y + 21:
+                            arrow = '←'
+                        elif stop_1_y > stop_2_y:
+                            arrow = '↖'
+                        else:
+                            arrow = '↙'
+
+                    arc_weight_text.setHtml(text_styling('arc', f'{str(arc_weight)} {arrow}', 'black'))
+                else:
+                    arc_weight_text.setHtml(text_styling('arc', str(arc_weight), 'black'))
+                # Force repaint
+                arc_weight_text.update()
+
+                try:
+                    #If the other directed arc is ↑ or ↓
+                    if shift_y == 0:
+                        text_shift = 17
+                    else:
+                        text_shift = 0
+                except NameError:
                     text_shift = 0
-            except NameError:
-                text_shift = 0
 
-            arc_weight_text.setPos(midpoint_x - arc_weight_text.boundingRect().width() // 2,
-                                   midpoint_y - arc_weight_text.boundingRect().height() // 2 + text_shift
-                                   )  # Position in the centre of vertex
+                arc_weight_text.setPos(midpoint_x - arc_weight_text.boundingRect().width() // 2,
+                                       midpoint_y - arc_weight_text.boundingRect().height() // 2 + text_shift
+                                       )  # Position in the centre of vertex
 
-            arc = QGraphicsItemGroup()
-            arc.addToGroup(arc_line)
-            arc.addToGroup(arc_weight_text)
-            arc.setZValue(-100)
-            self.workspace.addItem(arc)
+                arc = QGraphicsItemGroup()
+                arc.addToGroup(arc_line)
+                arc.addToGroup(arc_weight_text)
+                arc.setZValue(-100)
+                self.workspace.addItem(arc)
 
-            if direction_option == 'Two-way':
-                self.arcs[stop_1][stop_2] = arc
-                self.arcs[stop_2][stop_1] = arc
-            else:
-                if directed_route == f'{stop_1} → {stop_2}':
+                if direction_option == 'Two-way':
                     self.arcs[stop_1][stop_2] = arc
-                else:
                     self.arcs[stop_2][stop_1] = arc
+                else:
+                    if directed_route == f'{stop_1} → {stop_2}':
+                        self.arcs[stop_1][stop_2] = arc
+                    else:
+                        self.arcs[stop_2][stop_1] = arc
 
-        self.exit_process()
+            self.exit_process()
+        else:
+            message = QMessageBox()
+            message.setWindowTitle('Cannot Add a Path')
+            message.setIcon(QMessageBox.Icon.Warning)
+            text = 'You do not have enough\nstops to add a pathway.'
+            if len(self.vertices) == 1:
+                text += '\nApologies if intending to create a loop; \nthis app cannot do that yet.'
+            message.setText(text)
+            message.exec()
 
     def algorithm_initiation(self, algorithm):
         if len(self.vertices) >= 2:
@@ -1131,6 +1151,7 @@ at times, can omit more efficient routes.''')
             add_vertex_dialog = AddVertexDialog(list(self.graph.keys()))
 
             if add_vertex_dialog.exec() == QDialog.DialogCode.Accepted:
+                #self.start = perf_counter()
                 vertex_name = add_vertex_dialog.get_vertex_name()
 
                 vertex_shape.set_default()
@@ -1149,8 +1170,9 @@ at times, can omit more efficient routes.''')
                 vertex_text.update()
 
                 vertex_text.setZValue(200)
-                vertex_text.setPos(vertex_pos_x - vertex_text.boundingRect().width() // 2,
-                                    vertex_pos_y - vertex_text.boundingRect().height() // 2)
+                vertex_text.setPos(vertex_pos_x - vertex_text.boundingRect().width() // 2 + 1, #Horizontal offset
+                                    vertex_pos_y - vertex_text.boundingRect().height() // 2
+                                   )
 
                 #-------------------------------------------------------
                 #FINAL OPERATIONS
@@ -1357,9 +1379,16 @@ at times, can omit more efficient routes.''')
         self.replay_route_button.setEnabled(True)
 
     def wipe_graph(self):
-        for item in list(self.workspace.items()):
-            self.workspace.removeItem(item)
-        self.graph, self.vertices, self.arcs = {}, {}, {}
+        if self.algorithm_vertex_select or self.algorithm_route_display:
+            message = QMessageBox()
+            message.setWindowTitle('Graph Cannot be Wiped')
+            message.setIcon(QMessageBox.Icon.Warning)
+            message.setText('A process is currently active;\nplease exit the process before wiping the graph.')
+            message.exec()
+        else:
+            for item in list(self.workspace.items()):
+                self.workspace.removeItem(item)
+            self.graph, self.vertices, self.arcs = {}, {}, {}
 
 
 app = QApplication([])

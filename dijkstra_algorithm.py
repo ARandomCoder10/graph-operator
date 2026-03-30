@@ -54,7 +54,9 @@
 #principal = 'S'
 
 from copy import deepcopy
+from time import perf_counter
 def solve(graph, directed, principal):
+    #start = perf_counter()
     #Creating the dictionary of results
     results = {}
 
@@ -108,14 +110,14 @@ def solve(graph, directed, principal):
 
                 #If the path up to the visiting_vertex + the adjacent arc is less than (or equal to)
                 #the one set for the arc_vertex
-                if results[visiting_vertex][1] + arc_weight <= results[arc_vertex][1]:
+                if (results[visiting_vertex][1] + arc_weight).__round__(4) <= results[arc_vertex][1]:
 
                     #Copy the pathway up to the visiting vertex...
                     results[arc_vertex] = deepcopy(results[visiting_vertex])
                     #...add the arc_vertex to the pathway...
                     results[arc_vertex][0].append(arc_vertex)
                     #...and update the total weight with the arc_weight
-                    results[arc_vertex][1] += arc_weight
+                    results[arc_vertex][1] = (results[arc_vertex][1] + arc_weight).__round__(4)
 
                     #Add it to the working values
                     work_values[work_vertices.index(arc_vertex)] = results[arc_vertex][1]
@@ -190,6 +192,8 @@ def solve(graph, directed, principal):
         sorted_results[vertex] = [deepcopy(sorted_pathways), branches[1]]
 
     results = deepcopy(sorted_results)
+    #end = perf_counter()
+    #print(f'DIJKSTRA: {end-start}s')
 
     #Returning the final results
     return results
