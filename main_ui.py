@@ -179,13 +179,33 @@ class AddVertexDialog(QDialog):
         QTimer.singleShot(0, self.adjustSize)
 
     def input_validation(self):
+
+        # A small algorithm to remove unnecessary spaces
+        self.name_input_text = self.vertex_name_input.text()
+
+        #Removing preceding spaces
+        for i, char in enumerate(self.name_input_text):
+            if char != ' ':
+                self.name_input_text = self.name_input_text[i:]
+
+                # Removing succeeding spaces by iterating backwards
+                for j, char1 in enumerate(self.name_input_text[::-1]):
+                    if char1 != ' ':
+                        self.name_input_text = self.name_input_text[:len(self.name_input_text) - j]
+                        break
+                break
+
+            #If it only consists of spaces...
+            elif i == len(self.name_input_text) - 1:
+                self.name_input_text = ''
+
         #Checking if the vertex name is already used
-        if self.vertex_name_input.text() in self.vertices:
+        if self.name_input_text in self.vertices:
             self.warning.setText("You've already used this name. Please choose a different one.")
             self.warning.show()
             self.vertex_name_input.textEdited.connect(self.hide_warning)
         #A presence check
-        elif self.vertex_name_input.text() == '':
+        elif self.name_input_text == '':
             self.warning.setText('Please enter a stop name.')
             self.warning.show()
             self.vertex_name_input.textEdited.connect(self.hide_warning)
@@ -194,7 +214,7 @@ class AddVertexDialog(QDialog):
             self.accept()
 
     def get_vertex_name(self):
-        return self.vertex_name_input.text()
+        return self.name_input_text
 
 class AddArcDialog(QDialog):
     def __init__(self, vertices, arcs):
@@ -1325,6 +1345,7 @@ at times, can omit more efficient routes.''')
 
     def display_route(self):
         self.replay_route_button.setDisabled(True)
+        self.exit_button.setDisabled(True)
 
         # Updating the route_counter
         if self.multiple_routes:
@@ -1377,6 +1398,7 @@ at times, can omit more efficient routes.''')
 
         #Finishing and showing the replay
         self.replay_route_button.setEnabled(True)
+        self.exit_button.setEnabled(True)
 
     def wipe_graph(self):
         if self.algorithm_vertex_select or self.algorithm_route_display:
