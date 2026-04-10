@@ -272,43 +272,46 @@ def solve(graph, directed, principal):
 #pass
 
 #seventh test data - randomised graphs
+'''
 import random
-#letters = 'ABCDEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"£$%^&*()-=[]:;@<>?+_.,{}~'
-#graph = {}
-#n = 2
+letters = 'ABCDEGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"£$%^&*()-=[]:;@<>?+_.,{}~'
+graph = {}
+n = 2
 
-#for i in range(78):
-#    directed = False
-#    n += 1
-#
-#    for key in letters[:n]:
-#        graph[key] = {}
-#
-#    for key in letters[:n-1]:
-#        index = letters.index(key) + 1
-#
-#        for vertex in letters[index:n]:
-#            #75% chance of there being an arc
-#            if random.random() <= 0.75:
-#
-#                #85% chance it is undirected
-#                if random.random() <= 0.85:
-#                    a = random.randint(1, 1000)
-#                    graph[key][vertex] = a
-#                    graph[vertex][key] = a
-#
-#                #15% chance it is directed
-#                else:
-#                    #40% chance it goes one direction
-#                    if random.random() <= 0.4:
-#                        graph[key][vertex] = random.randint(1, 1000)
-#                    elif 0.4 < random.random() <= 0.8:
-#                        graph[vertex][key] = random.randint(1, 1000)
-#
-#                    #20% chance it goes both directions
-#                    else:
-#                        graph[key][vertex] = random.randint(1, 1000)
-#                        graph[vertex][key] = random.randint(1, 1000)
-#
-#                    directed = True
-#    a = solve(graph, directed, 'A')
+for i in range(78):
+    directed = False
+    n += 1
+
+    for key in letters[:n]:
+        graph[key] = {}
+
+    for key in letters[:n-1]:
+        index = letters.index(key) + 1
+
+        for vertex in letters[index:n]:
+            #75% chance of there being an arc
+            if random.random() <= 0.75:
+
+                #85% chance it is undirected
+                if random.random() <= 0.85:
+                    a = random.randint(1, 1000)
+                    graph[key][vertex] = a
+                    graph[vertex][key] = a
+
+                #15% chance it is directed
+                else:
+                    b = random.random()
+                    #40% chance it goes one direction
+                    if b <= 0.4:
+                        graph[key][vertex] = random.randint(1, 1000)
+                    elif 0.4 < b <= 0.8:
+                        graph[vertex][key] = random.randint(1, 1000)
+
+                    #20% chance it goes both directions
+                    else:
+                        graph[key][vertex] = random.randint(1, 1000)
+                        graph[vertex][key] = random.randint(1, 1000)
+
+                    directed = True
+    a = solve(graph, directed, 'A')
+'''

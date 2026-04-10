@@ -179,7 +179,6 @@ class AddVertexDialog(QDialog):
         QTimer.singleShot(0, self.adjustSize)
 
     def input_validation(self):
-
         # A small algorithm to remove unnecessary spaces
         self.name_input_text = self.vertex_name_input.text()
 
