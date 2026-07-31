@@ -182,21 +182,14 @@ class AddVertexDialog(QDialog):
         # A small algorithm to remove unnecessary spaces
         self.name_input_text = self.vertex_name_input.text()
 
-        #Removing preceding spaces
-        for i, char in enumerate(self.name_input_text):
-            if char != ' ':
-                self.name_input_text = self.name_input_text[i:]
-
-                # Removing succeeding spaces by iterating backwards
-                for j, char1 in enumerate(self.name_input_text[::-1]):
-                    if char1 != ' ':
-                        self.name_input_text = self.name_input_text[:len(self.name_input_text) - j]
-                        break
-                break
-
-            #If it only consists of spaces...
-            elif i == len(self.name_input_text) - 1:
-                self.name_input_text = ''
+        #Removing unnecessary groups of spaces (2 or more)
+        while '  ' in self.name_input_text:
+            self.name_input_text = self.name_input_text.replace('  ', ' ')
+        #Removing the single spaces at start and end
+        if self.name_input_text[0] == ' ':
+            self.name_input_text = self.name_input_text[1:]
+        if self.name_input_text[-1] == ' ':
+            self.name_input_text = self.name_input_text[:-1]
 
         #Checking if the vertex name is already used
         if self.name_input_text in self.vertices:
@@ -213,6 +206,7 @@ class AddVertexDialog(QDialog):
             self.accept()
 
     def get_vertex_name(self):
+        print(self.name_input_text)
         return self.name_input_text
 
 class AddArcDialog(QDialog):
@@ -455,7 +449,7 @@ class AddArcDialog(QDialog):
             self.arc_weight_input_warning.setText('Please enter a number.')
             self.arc_weight_input_warning.show()
 
-        elif float(self.arc_weight_input.text()) == 0:
+        elif float(self.arc_weight_input.text()) == 0.0:
             self.arc_weight_input_warning.setText('Please enter a positive number.')
             self.arc_weight_input_warning.show()
 
@@ -1172,6 +1166,7 @@ at times, can omit more efficient routes.''')
             if add_vertex_dialog.exec() == QDialog.DialogCode.Accepted:
                 #self.start = perf_counter()
                 vertex_name = add_vertex_dialog.get_vertex_name()
+                print(vertex_name)
 
                 vertex_shape.set_default()
 
