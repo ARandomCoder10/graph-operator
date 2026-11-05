@@ -54,7 +54,7 @@
 #principal = 'S'
 
 from copy import deepcopy
-from time import perf_counter
+#from time import perf_counter
 def solve(graph, directed, principal):
     #start = perf_counter()
     #Creating the dictionary of results
@@ -86,7 +86,6 @@ def solve(graph, directed, principal):
     path_branches = [[results, working_values, graph_dijk, principal]]
     incomplete = True
 
-    #Finding every path_branch
     while incomplete:
 
         #For each path_branch, the algorithm

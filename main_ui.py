@@ -206,7 +206,6 @@ class AddVertexDialog(QDialog):
             self.accept()
 
     def get_vertex_name(self):
-        print(self.name_input_text)
         return self.name_input_text
 
 class AddArcDialog(QDialog):
